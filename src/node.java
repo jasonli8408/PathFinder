@@ -7,7 +7,6 @@ import java.util.List;
 public class node implements Comparable<node>{
     //each node has a parent
 
-    private int id;
     private node parent;
 
     //g(x) --> absolute distance moving from one node to another
@@ -22,11 +21,9 @@ public class node implements Comparable<node>{
     int x;
     int y;
 
-
-
-
-
-    public node(double h) {
+    public node(double h, int x, int y) {
+        this.x = x;
+        this.y = y;
         this.h = h;
         parent = null;
         g = 0;
@@ -43,5 +40,10 @@ public class node implements Comparable<node>{
        }
     }
 
+    public void addChildren(node node) {
+        if (!children.contains(node)) {
+            children.add(node);
+        }
+    }
 
 }
