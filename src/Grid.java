@@ -1,7 +1,7 @@
 public class Grid {
-    private node[][] grid;
+    private Coordinate[][] grid;
     public Grid(int x, int y) {
-        this.grid = new node[y][x];
+        this.grid = new Coordinate[y][x];
     }
 
     //method that calculates huristics
