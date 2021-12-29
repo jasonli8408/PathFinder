@@ -71,6 +71,7 @@ public class Node implements Comparable<Node>{
     //setters F,G,H are constantly changing and isNode changes based on input
 
 
+
     public double calcF() {
         this.f = g + h;
        return f;
@@ -86,8 +87,8 @@ public class Node implements Comparable<Node>{
         return this.h;
     }
 
-    public void setNode(Boolean node) {
-        isNode = node;
+    public void setObstacle() {
+        isNode = false;
     }
 
     public boolean isNode(){

@@ -27,6 +27,10 @@ public class PathFinder {
         path = new LinkedList<>();
     }
 
+    public Grid getGrid() {
+        return grid;
+    }
+
     public Node aStar() {
         while (!openList.isEmpty()) {
             Node current  = openList.poll();

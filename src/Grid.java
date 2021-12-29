@@ -8,8 +8,8 @@ public class Grid {
         grid = new Node[rows][cols];
         for(int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                Node temp = new Node(i, j);
-                grid[i][j] = temp;
+                Node temp = new Node(j, i);
+                grid[j][i] = temp;
             }
         }
     }
@@ -26,7 +26,10 @@ public class Grid {
     }
 
     public boolean isValidNode(int rows, int column){
-        return grid[rows][column].isNode();
-    }
+
+            return grid[rows][column].isNode();
+        }
+
+
 
 }
