@@ -1,7 +1,7 @@
 public class Grid {
     private Node[][] grid;
-    private int rows;
-    private int cols;
+    private final int rows;
+    private final int cols;
     public Grid(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;

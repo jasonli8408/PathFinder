@@ -40,8 +40,6 @@ public class PathFinder {
 
 
         }
-
-
         return null;
 
     }
@@ -49,7 +47,11 @@ public class PathFinder {
 
     private List<Node> findChildren(Node node) {
         ArrayList<Node> children = new ArrayList<>();
-        if (node.getX()
+        int rows = grid.getRows();
+        int cols = grid.getCols();
+        if ((1 <= node.getX() <= rows - 1)) && (1 <= node.getY() <= cols - 1)){
+
+        }
         return children;
     }
 

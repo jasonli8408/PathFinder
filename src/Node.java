@@ -18,8 +18,8 @@ public class Node implements Comparable<Node>{
     public double g;
     public double h;
     private Boolean isNode; //after the input we understand if the node can be used or not (might be an obstacle)
-    private int x; //for the coordinate
-    private int y;
+    private final int x; //for the coordinate
+    private final int y;
 
     public Node(int x1, int y1) {
 
