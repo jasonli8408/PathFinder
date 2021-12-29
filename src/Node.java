@@ -106,4 +106,9 @@ public class Node implements Comparable<Node>{
     public int hashCode() {
         return Objects.hash(x, y);
     }
+
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
 }

@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class PathFinder {
-    private final PriorityQueue<Node> closedList;
-    private final PriorityQueue<Node> openList;
-    private final Node startNode;
-    private final Node endNode;
-    private final Grid grid;
+    private PriorityQueue<Node> closedList = new PriorityQueue<>();
+    private PriorityQueue<Node> openList = new PriorityQueue<>();
+    private Node startNode;
+    private Node endNode;
+    private Grid grid;
+    private List<Node> path;
 
 
 
@@ -23,6 +24,7 @@ public class PathFinder {
 
         openList.add(start);
         grid = new Grid(row, col);
+        path = new LinkedList<>();
     }
 
     public Node aStar() {
@@ -85,17 +87,17 @@ public class PathFinder {
     }
 
     public List<Node> findPath(Node end) {
-        List<Node> paths = new LinkedList<>();
         //since each node only has ONE parent, we can simply traverse back to the starting point
         if (end == null) {
-            return paths;
+            return path;
         }
 
+
+        path.add(end);
         Node parent = end.parent;
-        paths.add(parent);
         findPath(parent);
 
-        return paths;
+        return path;
     }
 
     public List<Node> findChildren(Node node) {
@@ -166,6 +168,5 @@ public class PathFinder {
             return null;
         }
     }
-
 
 }
