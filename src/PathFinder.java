@@ -41,7 +41,9 @@ public class PathFinder {
 
 
     private List<Node> findChildren(Node node) {
-        return new ArrayList<>();
+        ArrayList<Node> children = new ArrayList<>();
+        if (node.getX()
+        return children;
     }
 
 
