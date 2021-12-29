@@ -3,8 +3,8 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class PathFinder {
-    private PriorityQueue<Node> closedList = new PriorityQueue<>();
-    private PriorityQueue<Node> openList = new PriorityQueue<>();
+    private PriorityQueue<Node> closedList = new PriorityQueue<>(); //we are in this path
+    private PriorityQueue<Node> openList = new PriorityQueue<>(); //
     private Node startNode;
     private Node endNode;
     private Grid grid;
@@ -34,36 +34,32 @@ public class PathFinder {
             openList.remove(m);
 
 
-            //find all the children! and assign it to the arraylistsw
+            //find all the children! and assign it to the arraylists
             List<Node> children = findChildren(m);
             for (Node child : children) {
+                if(closedList.contains(child)){ //already calculated
+                    continue;
+                }
+
+                //calculating tentative score
+                double tempG;
                 if (Math.abs(m.getX() - child.getX()) == 1 && Math.abs(m.getY() - child.getY()) == 1) {
-                    child.g = m.g + 1.4;
+                    tempG = m.g + 1.4;
                 } else {
-                    child.g = m.g + 1;
+                    tempG = m.g + 1;
                 }
 
-                if (!openList.contains(child) && !closedList.contains(child)) {
-
-                    child.f = child.g + child.calcH(endNode);
-                    openList.add(child);
-
-                } else  { //
-                    if (openList.contains(child)) {
-                        if (child.g > child.g + child.calcH(endNode)) {
-                            child.f = child.g + child.calcH(endNode);
-                        }
+                //calculate what is the shortest path to get from start to current
+                if (!openList.contains(child)) { //if it's not in the open list calculate the g value and how we got there
+                    //we never had any other options to get to the current child
+                    child.g = tempG;
+                    openList.add(child); //now we have visited this node with this way
+                }
+                else  { //it's in both neighbour and open set, and we might have gotten to current with lower score before
+                    if (tempG < child.g) { //this is the better way to get from initial to current
+                        child.g = tempG; //so we update the g value
                     }
-
-//                    if (closedList.contains(child)) {
-//                        //what do we want to do here?
-//                    }
-
-
-
                 }
-
-
             }
 
 
@@ -127,7 +123,7 @@ public class PathFinder {
             children.add(addChildren(cols + 1, rows));
             children.add(addChildren(cols - 1, rows - 1));
             children.add(addChildren(cols, rows - 1));
-            children.add(addChildren(cols + 1, rows - 1));
+            children.add(addChildren(cols - 1, rows - 1));
         }
 
         return children;
