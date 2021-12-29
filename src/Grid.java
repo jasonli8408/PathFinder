@@ -7,7 +7,7 @@ public class Grid {
                 Node temp = new Node(i,j);
                 grid[i][j] = temp;
             }
-            //
+           //
         }
     }
 }

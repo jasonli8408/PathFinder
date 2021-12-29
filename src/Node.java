@@ -30,6 +30,7 @@ public class Node implements Comparable<Node>{
         h = -1; //-1 means we haven't calculated the value since h, f,g are not constant
         g = -1;
         f = -1;
+        //
 
         //values that change based on input
         isNode = true; //since from the beginning there are no obstacle its assumed every node is available
