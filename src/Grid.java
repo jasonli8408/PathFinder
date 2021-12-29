@@ -1,12 +1,14 @@
 public class Grid {
     private Node[][] grid;
-    public Grid(int x, int y) {
-        this.grid = new Node[y][x];
+    public Grid(int rows, int cols) {
+        grid = new Node[rows][cols];
+        for(int i = 0; i < rows; i++){
 
+        }
     }
 
 
 
-    //method that calculates huristics
+
 
 }
