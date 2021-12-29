@@ -1,10 +1,11 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
 public class PathFinder {
-    private PriorityQueue<Node> closedList = new PriorityQueue<>(); //we are in this path
-    private PriorityQueue<Node> openList = new PriorityQueue<>(); //
+    private PriorityQueue<Node> closedList = new PriorityQueue<>();
+    private PriorityQueue<Node> openList = new PriorityQueue<>();
     private Node startNode;
     private Node endNode;
     private Grid grid;
@@ -26,46 +27,76 @@ public class PathFinder {
 
     public Node aStar() {
         while (!openList.isEmpty()) {
-            Node m  = openList.poll();
-            if (m.equals(endNode)) {
-                return m;
+            Node current  = openList.poll();
+            if (current.equals(endNode)) {
+                return current;
             }
-            closedList.add(m);
-            openList.remove(m);
+            closedList.add(current);
+            openList.remove(current);
 
 
-            //find all the children! and assign it to the arraylists
-            List<Node> children = findChildren(m);
+            //find all the children! and assign it to the arraylistsw
+            List<Node> children = findChildren(current);
             for (Node child : children) {
-                if(closedList.contains(child)){ //already calculated
-                    continue;
-                }
-
-                //calculating tentative score
                 double tempG;
-                if (Math.abs(m.getX() - child.getX()) == 1 && Math.abs(m.getY() - child.getY()) == 1) {
-                    tempG = m.g + 1.4;
+                if (Math.abs(current.getX() - child.getX()) == 1 && Math.abs(current.getY() - child.getY()) == 1) {
+                    tempG = current.g + 1.4;
                 } else {
-                    tempG = m.g + 1;
+                    tempG = current.g + 1;
                 }
 
-                //calculate what is the shortest path to get from start to current
-                if (!openList.contains(child)) { //if it's not in the open list calculate the g value and how we got there
-                    //we never had any other options to get to the current child
+                if (!openList.contains(child) && !closedList.contains(child)) {
+
+                    child.parent = current;
                     child.g = tempG;
-                    openList.add(child); //now we have visited this node with this way
-                }
-                else  { //it's in both neighbour and open set, and we might have gotten to current with lower score before
-                    if (tempG < child.g) { //this is the better way to get from initial to current
-                        child.g = tempG; //so we update the g value
+                    child.f = child.g + child.calcH(endNode);
+                    openList.add(child);
+
+                } else  { //
+                    if (openList.contains(child)) {
+                        if (tempG < child.g) {
+                            child.g = tempG;
+                            child.parent = current;
+                            child.f = child.g + child.calcH(endNode);
+
+                        }
+
+
+
+                        if (closedList.contains(child)) {
+                            if (tempG < child.g) {
+                                closedList.remove(child);
+                                openList.add(child);
+                                child.g = tempG;
+                                child.parent = current;
+                                child.f = child.g + child.calcH(endNode);
+                            }
+                        }
                     }
                 }
+
+
             }
 
 
         }
         return null;
 
+    }
+
+    public List<Node> findPath(Node end) {
+        end = this.aStar();
+        List<Node> paths = new LinkedList<>();
+        //since each node only has ONE parent, we can simply traverse back to the starting point
+        if (end == null) {
+            return null;
+        }
+
+        Node parent = end.parent;
+        paths.add(parent);
+        findPath(parent);
+
+        return paths;
     }
 
     private List<Node> findChildren(Node node) {
@@ -123,7 +154,7 @@ public class PathFinder {
             children.add(addChildren(cols + 1, rows));
             children.add(addChildren(cols - 1, rows - 1));
             children.add(addChildren(cols, rows - 1));
-            children.add(addChildren(cols - 1, rows - 1));
+            children.add(addChildren(cols + 1, rows - 1));
         }
 
         return children;

@@ -1,16 +1,41 @@
 # path finder
 
-open set --> all nodes we are considering ---> every nodes that we might make the next step from 
-for each Node --. keep track of current best score, estimated total score and current best previous Node 
+// A* Search Algorithm
+1.  Initialize the open list
+2.  Initialize the closed list
+    put the starting node on the open
+    list (you can leave its f at zero)
 
-two different scores:
-1. score to get from one Node to next 
-2. second score give estimate of cost from any Node to estimation 
+3.  while the open list is not empty
+    a) find the node with the least f on
+    the open list, call it "q"
 
-at the VERY star 
-open set is the start Node 
+    b) pop q off the open list
 
-at EACH iteration : 
-1. select Node from open set that has lowest estimated total score 
-2. remove this Node from open set
-3. then add all of the nodes we can reach from that removed Node 
+    c) generate q's 8 successors and set their
+    parents to q
+
+    d) for each successor
+    i) if successor is the goal, stop search
+    successor.g = q.g + distance between
+    successor and q
+    successor.h = distance from goal to
+    successor (This can be done using many
+    ways, we will discuss three heuristics-
+    Manhattan, Diagonal and Euclidean
+    Heuristics)
+
+          successor.f = successor.g + successor.h
+
+        ii) if a node with the same position as 
+            successor is in the OPEN list which has a 
+           lower f than successor, skip this successor
+
+        iii) if a node with the same position as 
+            successor  is in the CLOSED list which has
+            a lower f than successor, skip this successor
+            otherwise, add  the node to the open list
+    end (for loop)
+
+    e) push q on the closed list
+    end (while loop)
