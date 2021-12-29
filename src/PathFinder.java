@@ -48,7 +48,7 @@ public class PathFinder {
                     child.f = child.g + child.calcH(endNode);
                     openList.add(child);
 
-                } else  {
+                } else  { //
                     if (openList.contains(child)) {
                         if (child.g > child.g + child.calcH(endNode)) {
                             child.f = child.g + child.calcH(endNode);
