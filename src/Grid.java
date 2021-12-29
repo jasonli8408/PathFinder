@@ -1,5 +1,5 @@
 public class Grid {
-    private Node[][] grid;
+    private final Node[][] grid;
     private final int rows;
     private final int cols;
     public Grid(int rows, int cols) {

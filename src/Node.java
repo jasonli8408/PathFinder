@@ -1,7 +1,3 @@
-import com.sun.javafx.geom.Edge;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 //this class represents a node in the graph
@@ -89,7 +85,6 @@ public class Node implements Comparable<Node>{
         this.h = Math.sqrt(Math.abs((x-b.getX())*(x-b.getX())+(y-b.getY())*(y-b.getY())));
         return this.h;
     }
-
 
     public void setNode(Boolean node) {
         isNode = node;
