@@ -7,10 +7,11 @@ public class PathFinder {
     private PriorityQueue<Node> openList = new PriorityQueue<>();
     private Node startNode;
     private Node endNode;
+    private Grid grid;
 
 
 
-    public PathFinder(Node start, Node end) {
+    public PathFinder(Node start, Node end, int row, int col) {
         startNode = start;
         endNode = end;
         closedList = new PriorityQueue<>();
@@ -19,6 +20,7 @@ public class PathFinder {
         startNode.f = start.calcF();
         startNode.g = start.calcG();
         openList.add(start);
+        grid = new Grid(row, col);
     }
 
     public Node aStar() {
@@ -31,6 +33,11 @@ public class PathFinder {
 
 
             //find all the children! and assign it to the arraylist
+            List<Node> children = findChildren(m);
+            for (Node child : children) {
+
+            }
+
 
         }
 
