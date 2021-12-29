@@ -7,7 +7,8 @@ public class Main {
         Node endNode = new Node(6,6);
         PathFinder pathFinder = new PathFinder(startNode, endNode, 7,7);
 
-        List<Node> path = pathFinder.findPath(endNode);
+        Node end = pathFinder.aStar();
+        List<Node> path = pathFinder.findPath(end);
 
         for (Node node : path) {
             System.out.println(node);

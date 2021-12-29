@@ -85,11 +85,10 @@ public class PathFinder {
     }
 
     public List<Node> findPath(Node end) {
-        end = this.aStar();
         List<Node> paths = new LinkedList<>();
         //since each node only has ONE parent, we can simply traverse back to the starting point
         if (end == null) {
-            return null;
+            return paths;
         }
 
         Node parent = end.parent;
