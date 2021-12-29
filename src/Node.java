@@ -2,6 +2,7 @@ import com.sun.javafx.geom.Edge;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 //this class represents a node in the graph
 public class Node implements Comparable<Node>{
@@ -74,19 +75,36 @@ public class Node implements Comparable<Node>{
     //setters F,G,H are constantly changing and isNode changes based on input
 
 
-    public void calcF(double g1, double h1) {
-        this.f = g1 + h1; //f(n) = g(n) + h(n)
+    public double calcF() {
+        this.f = g + h;
+       return f;
     }
 
-    public void calcH(Node a, Node b) { //node b is the destination, node a is current node
-        this.h = Math.sqrt(Math.abs((a.getX()-b.getX())*(a.getX()-b.getX())+(a.getY()-b.getY())*(a.getY()-b.getY())));
+    public double calcG() {
+        this.g = f - h;
+        return g;
     }
 
-//    public void setG(double h) { //we dont know yet
-//        this.h = h;
-//    }
+    public double calcH(Node b) { //node b is the destination, node a is current node
+        this.h = Math.sqrt(Math.abs((x-b.getX())*(x-b.getX())+(y-b.getY())*(y-b.getY())));
+        return this.h;
+    }
+
 
     public void setNode(Boolean node) {
         isNode = node;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return x == node.x && y == node.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 }
