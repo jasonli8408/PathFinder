@@ -4,8 +4,8 @@ public class Main {
 
     public static void main(String[] args) {
         Node startNode = new Node(0,0);
-        Node endNode = new Node(6,4);
-        PathFinder pathFinder = new PathFinder(startNode, endNode, 7,7);
+        Node endNode = new Node(1,4);
+        PathFinder pathFinder = new PathFinder(startNode, endNode, 4,5);
         //System.out.println(pathFinder.findChildren(startNode));
         //System.out.println(pathFinder.findChildren(endNode));
 
