@@ -38,7 +38,6 @@ public class PathFinder {
 
             }
 
-
         }
         return null;
 
@@ -49,9 +48,23 @@ public class PathFinder {
         ArrayList<Node> children = new ArrayList<>();
         int rows = grid.getRows();
         int cols = grid.getCols();
-        if ((1 <= node.getX() <= rows - 1)) && (1 <= node.getY() <= cols - 1)){
+        int x = node.getX();
+        int y = node.getY();
+
+        if (1 <= node.getY() && node.getY() <= rows - 1 && 1 <= node.getX() && node.getX() <= cols){
+            children.add(grid.getNode(x - 1, y - 1));
+            children.add(grid.getNode(x - 1, y));
+            children.add(grid.getNode(x - 1 , y + 1));
+            children.add(grid.getNode(x, y - 1));
+            children.add(grid.getNode(x, y + 1));
+            children.add(grid.getNode(x + 1, y - 1));
+            children.add(grid.getNode(x + 1, y));
+            children.add(grid.getNode(x + 1, y + 1));
+        } else if (node.getX() == 1 && node.getY() == 1) {
 
         }
+
+
         return children;
     }
 

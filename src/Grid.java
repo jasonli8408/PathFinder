@@ -22,4 +22,12 @@ public class Grid {
         return this.cols;
     }
 
+    public Node getNode(int rows, int column){
+        return grid[rows][column];
+    }
+
+    public boolean isValidNode(int rows, int column){
+        return grid[rows][column].isNode();
+    }
+
 }

@@ -13,7 +13,7 @@ public class Node implements Comparable<Node>{
     //h(x) --> from n to target end point
 
     //each node can also be a parents, so it has a list of edges
-
+    public  Node parent;
     public double f;
     public double g;
     public double h;
@@ -30,6 +30,7 @@ public class Node implements Comparable<Node>{
         h = -1; //-1 means we haven't calculated the value since h, f,g are not constant
         g = -1;
         f = -1;
+        parent = null;
         //
 
         //values that change based on input
@@ -93,6 +94,10 @@ public class Node implements Comparable<Node>{
 
     public void setNode(Boolean node) {
         isNode = node;
+    }
+
+    public boolean isNode(){
+        return isNode;
     }
 
     @Override
