@@ -34,7 +34,7 @@ public class PathFinder {
             openList.remove(m);
 
 
-            //find all the children! and assign it to the arraylists
+            //find all the children! and assign it to the arraylistsw
             List<Node> children = findChildren(m);
             for (Node child : children) {
                 if (Math.abs(m.getX() - child.getX()) == 1 && Math.abs(m.getY() - child.getY()) == 1) {
@@ -49,6 +49,15 @@ public class PathFinder {
                     openList.add(child);
 
                 } else  {
+                    if (openList.contains(child)) {
+                        if (child.g > child.g + child.calcH(endNode)) {
+                            child.f = child.g + child.calcH(endNode);
+                        }
+                    }
+
+//                    if (closedList.contains(child)) {
+//                        //what do we want to do here?
+//                    }
 
 
 
