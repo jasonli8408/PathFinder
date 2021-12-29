@@ -13,9 +13,9 @@ public class Node implements Comparable<Node>{
 
     //each node can also be a parents, so it has a list of edges
 
-    private double f;
-    private double g;
-    private double h;
+    public double f;
+    public double g;
+    public double h;
     private Boolean isNode; //after the input we understand if the node can be used or not (might be an obstacle)
     private int x; //for the coordinate
     private int y;
@@ -25,7 +25,6 @@ public class Node implements Comparable<Node>{
         //values that are constant
         x = x1;
         y = y1;
-
         //values that are going to get calculated
         h = -1; //-1 means we haven't calculated the value since h, f,g are not constant
         g = -1;
