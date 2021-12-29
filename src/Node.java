@@ -1,26 +1,28 @@
+import com.sun.javafx.geom.Edge;
+
 import java.util.ArrayList;
 import java.util.List;
 
-//this class represents a Node in the graph
-public class Node extends Coordinate implements Comparable<Node>{
-    //each Node has a parent
+//this class represents a node in the graph
+public class Node implements Comparable<Node>{
+    //each node has a parent
 
     private Node parent;
 
-    //g(x) --> absolute distance moving from one Node to another
+    //g(x) --> absolute distance moving from one node to another
     //f(x) --> full estimation of cost
     //h(x) --> from n to target end point
 
-    //each Node can also be a parents, so it has a list of edges
+    //each node can also be a parents, so it has a list of edges
     private List<Node> children;
     private double f;
     private double g;
     private double h;
-    int x;
-    int y;
+    private Boolean isNode;
+    private int x;
+    private int y;
 
     public Node(double h, int x, int y) {
-        super(x, y);
         this.x = x;
         this.y = y;
         this.h = h;
@@ -28,6 +30,7 @@ public class Node extends Coordinate implements Comparable<Node>{
         g = 0;
         f = this.h;
         children = new ArrayList<>();
+        isNode = true;
     }
 
     @Override
@@ -44,5 +47,28 @@ public class Node extends Coordinate implements Comparable<Node>{
             children.add(node);
         }
     }
+
+    public boolean checkIsNode() {
+        return isNode;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+
+
 
 }
