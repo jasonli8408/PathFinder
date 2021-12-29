@@ -89,11 +89,7 @@ public class Node implements Comparable<Node>{
 
     //
     public void flipNode() {
-        if (isNode) {
-            isNode = false;
-        } else {
-            isNode = true;
-        }
+        isNode = !isNode;
     }
 
     public boolean isNode(){
