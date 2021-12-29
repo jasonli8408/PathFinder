@@ -87,8 +87,13 @@ public class Node implements Comparable<Node>{
         return this.h;
     }
 
-    public void setObstacle() {
-        isNode = false;
+    //
+    public void flipNode() {
+        if (isNode) {
+            isNode = false;
+        } else {
+            isNode = true;
+        }
     }
 
     public boolean isNode(){
