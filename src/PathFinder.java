@@ -98,14 +98,14 @@ public class PathFinder {
         return paths;
     }
 
-    private List<Node> findChildren(Node node) {
+    public List<Node> findChildren(Node node) {
         ArrayList<Node> children = new ArrayList<>();
         int rows = grid.getRows();
         int cols = grid.getCols();
         int x = node.getX();
         int y = node.getY();
 
-        if (1 <= node.getY() && node.getY() <= rows - 1 && 1 <= node.getX() && node.getX() <= cols) {
+        if (1 <= node.getY() && node.getY() <= rows - 2 && 1 <= node.getX() && node.getX() <= cols - 2) {
             children.add(addChildren(x - 1, y - 1));
             children.add(addChildren(x - 1, y));
             children.add(addChildren(x - 1, y + 1));
@@ -114,46 +114,46 @@ public class PathFinder {
             children.add(addChildren(x + 1, y - 1));
             children.add(addChildren(x + 1, y));
             children.add(addChildren(x + 1, y + 1));
-        } else if (node.getX() == 1 && node.getY() == 1) {
-            children.add(addChildren(1, 2));
-            children.add(addChildren(2, 2));
-            children.add(addChildren(2, 1));
-        } else if (node.getX() == 1 && node.getY() == rows) {
+        } else if (node.getX() == 0 && node.getY() == 0) {
+            children.add(addChildren(0, 1));
+            children.add(addChildren(1, 1));
+            children.add(addChildren(1, 0));
+        } else if (node.getX() == 0 && node.getY() == rows - 1) {
+            children.add(addChildren(0, rows - 2));
+            children.add(addChildren(1, rows - 2));
             children.add(addChildren(1, rows - 1));
-            children.add(addChildren(2, rows - 1));
-            children.add(addChildren(2, rows));
-        } else if (node.getX() == cols && node.getY() == 1) {
+        } else if (node.getX() == cols - 1 && node.getY() == 0) {
+            children.add(addChildren(cols - 2, 0));
+            children.add(addChildren(cols - 2, 1));
             children.add(addChildren(cols - 1, 1));
-            children.add(addChildren(cols - 1, 2));
-            children.add(addChildren(cols, 2));
-        } else if (node.getX() == cols && node.getY() == rows) {
+        } else if (node.getX() == cols - 1 && node.getY() == rows - 1) {
+            children.add(addChildren(cols - 2, rows - 1));
+            children.add(addChildren(cols - 2,  rows- 2));
+            children.add(addChildren(cols - 1, rows - 2));
+        } else if (node.getX() == 0) {
+            children.add(addChildren(0, rows - 2));
+            children.add(addChildren(0, rows));
+            children.add(addChildren(1, rows - 2));
+            children.add(addChildren(1, rows -1));
+            children.add(addChildren(1, rows ));
+        } else if (node.getX() == cols - 1) {
+            children.add(addChildren(cols - 1, rows - 2));
             children.add(addChildren(cols - 1, rows));
-            children.add(addChildren(cols - 1,  rows- 1));
-            children.add(addChildren(cols, rows - 1));
-        } else if (node.getX() == 1) {
-            children.add(addChildren(1, rows - 1));
-            children.add(addChildren(1, rows + 1));
-            children.add(addChildren(2, rows - 1));
-            children.add(addChildren(2, rows));
-            children.add(addChildren(2, rows + 1));
-        } else if (node.getX() == cols) {
-            children.add(addChildren(cols, rows - 1));
-            children.add(addChildren(cols, rows + 1));
-            children.add(addChildren(cols - 1, rows - 1));
-            children.add(addChildren(cols - 1, rows));
-            children.add(addChildren(cols - 1, rows + 1));
-        } else if (node.getY() == 1) {
+            children.add(addChildren(cols - 2, rows -2));
+            children.add(addChildren(cols - 2, rows - 1));
+            children.add(addChildren(cols - 2, rows));
+        } else if (node.getY() == 0) {
+            children.add(addChildren(cols - 2, 0));
+            children.add(addChildren(cols, 0));
+            children.add(addChildren(cols - 2, 1));
             children.add(addChildren(cols - 1, 1));
-            children.add(addChildren(cols + 1, 1));
-            children.add(addChildren(cols - 1, 2));
-            children.add(addChildren(cols, 2));
-            children.add(addChildren(cols + 1, 2));
-        } else if (node.getY() == rows) {
-            children.add(addChildren(cols - 1, rows));
-            children.add(addChildren(cols + 1, rows));
-            children.add(addChildren(cols - 1, rows - 1));
+            children.add(addChildren(cols, 1));
+        } else if (node.getY() == rows - 1) {
+            children.add(addChildren(cols - 2, rows - 1));
             children.add(addChildren(cols, rows - 1));
-            children.add(addChildren(cols + 1, rows - 1));
+            children.add(addChildren(cols - 2, rows - 2));
+            children.add(addChildren(cols - 1, rows - 2));
+            children.add(addChildren(cols, rows - 2));
         }
 
         return children;

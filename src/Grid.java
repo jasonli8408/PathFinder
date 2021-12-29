@@ -14,8 +14,6 @@ public class Grid {
         }
     }
 
-
-
     public int getRows(){
         return this.rows;
     }
