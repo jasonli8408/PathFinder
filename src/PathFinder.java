@@ -162,8 +162,8 @@ public class PathFinder {
     }
 
     private Node addChildren(int x, int y) {
-        if (grid.isValidNode(y, x)) {
-            return grid.getNode(y, x);
+        if (grid.isValidNode(x, y)) {
+            return grid.getNode(x, y);
         } else{
             return null;
         }
