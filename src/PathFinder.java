@@ -1,5 +1,3 @@
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +10,7 @@ public class PathFinder {
     private Node endNode;
     private Grid grid;
     private List<Node> path;
-    private Boolean hasSolution;
+    boolean solution = false;
 
 
 
@@ -28,7 +26,6 @@ public class PathFinder {
         openList.add(start);
         grid = new Grid(row, col);
         path = new LinkedList<>();
-        hasSolution = false;
     }
 
     public Grid getGrid() {
@@ -39,13 +36,14 @@ public class PathFinder {
         while (!openList.isEmpty()) {
             Node current  = openList.poll();
             if (current.equals(endNode)) {
+                solution = true;
                 return current;
             }
             closedList.add(current);
             openList.remove(current);
 
 
-            //find all the children! and assign it to the arraylistsw
+            //find all the children! and assign it to the arraylists
             List<Node> children = findChildren(current);
             for (Node child : children) {
                 double tempG;
@@ -90,22 +88,21 @@ public class PathFinder {
 
 
         }
-        hasSolution = false;
         return null;
-
     }
 
     public List<Node> findPath(Node end) {
-        if (!hasSolution) {
-            hasSolution = false;
-        }
         //since each node only has ONE parent, we can simply traverse back to the starting point
+        if(!solution){
+            return null;
+        }
         if (end == null) {
             return path;
         }
         path.add(end);
         Node parent = end.parent;
         findPath(parent);
+
         return path;
     }
 
