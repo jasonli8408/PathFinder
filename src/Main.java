@@ -3,9 +3,9 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        Node startNode = new Node(0,0);
-        Node endNode = new Node(1,3);
-        PathFinder pathFinder = new PathFinder(startNode, endNode, 4,4);
+        Node startNode = new Node(2,5);
+        Node endNode = new Node(8,7);
+        PathFinder pathFinder = new PathFinder(startNode, endNode, 10,10);
 
 
         Node end = pathFinder.aStar();

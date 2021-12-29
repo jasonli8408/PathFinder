@@ -25,6 +25,10 @@ public class Grid {
         return grid[rows][column];
     }
 
+    public void flipNode(int rows, int column){
+        grid[rows][column].flipNode();
+    }
+
     public boolean isValidNode(int rows, int column){
 
             return grid[rows][column].isNode();
