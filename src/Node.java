@@ -36,9 +36,9 @@ public class Node implements Comparable<Node>{
     @Override
     public int compareTo(Node other) {
        if (this.f > other.f) {
-           return 1;
+           return 1; //1 means gets added to the end
        } else {
-           return this.f < other.f ? - 1: 0;
+           return this.f < other.f ? - 1: 0;  // -1 means add it to the front
        }
     }
 
