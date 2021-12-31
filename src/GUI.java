@@ -11,6 +11,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private Character keyRightNow;
     private Node startNode;
     private Node endNode;
+    int isStartOn = 0;
+    int isEndOn = 0;
 
 
 
@@ -129,9 +131,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         frame.setVisible(true);
     }
 
-
-
-
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -176,20 +175,21 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     public void mouseClicked(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        if (keyRightNow == 'e') {
-
-
-            if (endNode == null) {
-                //create an end node
+        if (keyRightNow == 'e' || keyRightNow == 'E') {
+            isEndOn++;
+            if(isEndOn % 2 == 1){ //we create a node
+                // create an end node
                 endNode = new Node(x, y);
             }
-
-
+            else{ //we remove the node
+                endNode = null;
+            }
         }
         else if(keyRightNow == 's' || keyRightNow == 'S'){
             if(startNode == null){
                 startNode = new Node(x, y);
             }
+
 
         }
 
