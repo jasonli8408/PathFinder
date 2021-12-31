@@ -10,10 +10,6 @@ public class Main {
 
         Node end = pathFinder.aStar();
         List<Node> path = pathFinder.findPath(end);
-
-        for (Node node : path) {
-            System.out.println(node);
-        }
-
+        new GUI();
     }
 }

@@ -70,9 +70,6 @@ public class PathFinder {
                             child.f = child.g + child.calcH(endNode);
 
                         }
-
-
-
                         if (closedList.contains(child)) {
                             if (tempG < child.g) {
                                 closedList.remove(child);
@@ -177,5 +174,4 @@ public class PathFinder {
             return null;
         }
     }
-
 }
