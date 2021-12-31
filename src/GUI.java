@@ -5,6 +5,9 @@ import java.awt.event.*;
 public class GUI extends JPanel implements MouseWheelListener, MouseListener, KeyListener, ActionListener {
 
     private JFrame window;
+    private PathFinder pathFinder;
+    private final static int gridDimention = 25;
+
 
 
     public GUI(){
@@ -16,6 +19,20 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         window.pack();
         window.setVisible(true);
         window.repaint();
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+
+
+        g.setColor(Color.lightGray);
+        for (int y = 0; y < this.getHeight(); y += gridDimention) {
+            for (int x = 0; x < this.getWidth(); x += gridDimention) {
+                g.drawRect(x, y , gridDimention, gridDimention);
+            }
+        }
     }
 
     @Override
@@ -40,6 +57,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
     @Override
     public void mouseClicked(MouseEvent e) {
+
 
     }
 
