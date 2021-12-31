@@ -174,15 +174,22 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
         if (keyRightNow == 'e') {
-            int x = e.getX();
-            int y = e.getY();
+
 
             if (endNode == null) {
                 //create an end node
-                startNode = new Node(x, y);
+                endNode = new Node(x, y);
             }
 
+
+        }
+        else if(keyRightNow == 's' || keyRightNow == 'S'){
+            if(startNode == null){
+                startNode = new Node(x, y);
+            }
 
         }
 
