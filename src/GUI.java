@@ -7,7 +7,6 @@ public class GUI {
     public GUI(){
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
-
         panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
         panel.setLayout(new GridLayout(40 ,40));
         frame.add(panel, BorderLayout.CENTER); // adds the pannel
