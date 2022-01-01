@@ -2,10 +2,10 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 
 
-
-public class GUI extends JPanel implements MouseWheelListener, MouseListener, KeyListener, ActionListener {
+public class GUI extends JPanel implements MouseWheelListener, MouseListener, KeyListener, ActionListener, MouseMotionListener{
 
     private JFrame window;
     private PathFinder pathFinder;
@@ -15,16 +15,23 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private Node endNode;
     int isStartOn = 0;
     int isEndOn = 0;
-    private Node startNodeForFunc;
-    private Node EndNodeForFunc;
+    private Node pathFinderEndNode;
+    private Node pathFinderStartNode;
+    private List<Node> path;
 
 
 
- //
+
+    //
     public GUI() {
+
+        path = null;
+        pathFinderEndNode = null;
+        pathFinderStartNode = null;
         addMouseListener(this);
         addMouseWheelListener(this);
         addKeyListener(this);
+        addMouseMotionListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         keyRightNow = (char) '0';
@@ -33,6 +40,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         window = new JFrame();
         window.setContentPane(this);
         window.getContentPane().setPreferredSize(new Dimension(900,900));
+
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //how it would close
         window.setTitle("A* algorithm");
         window.pack();
@@ -80,6 +88,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         chooseStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
             }
         });
 
@@ -107,6 +116,12 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         findPath.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (pathFinderEndNode != null && pathFinderStartNode != null) {
+                    pathFinder = new PathFinder(pathFinderStartNode, pathFinderEndNode, 900/30, 900/30);
+
+                    path = pathFinder.findPath(pathFinder.aStar());
+                    repaint();
+                }
             }
         });
 
@@ -171,6 +186,14 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             g.fillRect(startNode.getX() + 1, startNode.getY() + 1, gridDimention - 1, gridDimention - 1);
         }
 
+        if (path != null) {
+            g.setColor(Color.green);
+            path.remove(pathFinderEndNode);
+            path.remove(pathFinderStartNode);
+            for (Node node : path) {
+                g.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
+            }
+        }
     }
 
     @Override
@@ -198,36 +221,31 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 int ySub = e.getY() % gridDimention;
                 if (isEndOn % 2 == 1 && endNode == null) {
                     endNode = new Node(e.getX() - xSub, e.getY() - ySub);
-                    EndNodeForFunc = new Node(endNode.getX()/30, endNode.getY()/30);
+                    pathFinderEndNode =  new Node(endNode.getX() / 30, endNode.getY() / 30);
                 }
                 else{
                     endNode = null;
-                    EndNodeForFunc = null;
                 }
                 repaint();
 
-            }
-            else if (keyRightNow == 's' || keyRightNow == 'S') {
-                isStartOn++;
+            } else if (keyRightNow == 's' || keyRightNow == 'S') {
                 int xSub = e.getX() % gridDimention;
                 int ySub = e.getY() % gridDimention;
-                if (isStartOn % 2 == 1 && endNode == null) {
+
+                if (startNode == null) {
                     startNode = new Node(e.getX() - xSub, e.getY() - ySub);
-                    startNodeForFunc = new Node(startNode.getX()/30, startNode.getY()/30);
+                    pathFinderStartNode = new Node(startNode.getX() / 30, startNode.getY() / 30);
                 }
-                else{
-                    startNode = null;
-                    startNodeForFunc = null;
-                }
+
                 repaint();
             }
 
 
 
 
-
-
-
+            if (pathFinderEndNode != null && pathFinderStartNode != null) {
+                pathFinder = new PathFinder(pathFinderStartNode, pathFinderEndNode, 900 / 30, 900 / 30);
+            }
         }
     }
 
@@ -260,5 +278,19 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     public void keyPressed(KeyEvent e) {
         char key = e.getKeyChar();
         keyRightNow = key;
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            if (keyRightNow == 'b') {
+
+            }
+        }
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
     }
 }
