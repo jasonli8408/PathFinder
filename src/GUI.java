@@ -9,7 +9,6 @@ import java.util.Set;
 
 public class GUI extends JPanel implements MouseWheelListener, MouseListener, KeyListener, ActionListener, MouseMotionListener{
 
-    private JFrame window;
     private PathFinder pathFinder;
     private final static int gridDimention = 30;
     private Character keyRightNow;
@@ -51,10 +50,10 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         addMouseMotionListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
-        keyRightNow = (char) '0';
+        keyRightNow = '0';
         startNode = null;
         endNode = null;
-        window = new JFrame();
+        JFrame window = new JFrame();
         window.setContentPane(this);
         window.getContentPane().setPreferredSize(new Dimension(width,height));
 
@@ -73,9 +72,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         JFrame frame = new JFrame();
         frame.setTitle("Control Panel");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Font size and style
-        Font font = new Font("Verdana", Font.BOLD, 30);
 
         JButton clearObstacles, clearEverything, findPath, incrementGridSize, decrementGridSize;
 
@@ -169,22 +165,16 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         incrementGridSize = new JButton("Increment Grid Size");
         incrementGridSize.setSize(new Dimension(10, 40));
         incrementGridSize.setBorder(new RoundedBorder(10));
-        incrementGridSize.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "you have pressed the Increment button");
-                increment();
-            }
+        incrementGridSize.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "you have pressed the Increment button");
+            increment();
         });
         decrementGridSize = new JButton("Decrement Grid Size");
         decrementGridSize.setSize(new Dimension(10, 40));
         decrementGridSize.setBorder(new RoundedBorder(10));
-        decrementGridSize.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "you have pressed the Decrement button");
-                decrement();
-            }
+        decrementGridSize.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "you have pressed the Decrement button");
+            decrement();
         });
 
         JPanel p2 = new JPanel();
@@ -326,8 +316,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
     @Override
     public void keyPressed(KeyEvent e) {
-        char key = e.getKeyChar();
-        keyRightNow = key;
+        keyRightNow = e.getKeyChar();
     }
 
     @Override

@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class PathFinder {
-    private PriorityQueue<Node> closedList = new PriorityQueue<>();
-    private PriorityQueue<Node> openList = new PriorityQueue<>();
-    private Node startNode;
-    private Node endNode;
-    private Grid grid;
-    private List<Node> path;
+    private final PriorityQueue<Node> closedList;
+    private final PriorityQueue<Node> openList;
+    private final Node startNode;
+    private final Node endNode;
+    private final Grid grid;
+    private final List<Node> path;
     public Boolean hasSolution;
 
 
