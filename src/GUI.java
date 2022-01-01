@@ -15,6 +15,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private Node endNode;
     int isStartOn = 0;
     int isEndOn = 0;
+    private Node startNodeForFunc;
+    private Node EndNodeForFunc;
 
 
 
@@ -196,9 +198,11 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 int ySub = e.getY() % gridDimention;
                 if (isEndOn % 2 == 1 && endNode == null) {
                     endNode = new Node(e.getX() - xSub, e.getY() - ySub);
+                    EndNodeForFunc = new Node(endNode.getX()/30, endNode.getY()/30);
                 }
                 else{
                     endNode = null;
+                    EndNodeForFunc = null;
                 }
                 repaint();
 
@@ -209,9 +213,11 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 int ySub = e.getY() % gridDimention;
                 if (isStartOn % 2 == 1 && endNode == null) {
                     startNode = new Node(e.getX() - xSub, e.getY() - ySub);
+                    startNodeForFunc = new Node(startNode.getX()/30, startNode.getY()/30);
                 }
                 else{
                     startNode = null;
+                    startNodeForFunc = null;
                 }
                 repaint();
             }
