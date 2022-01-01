@@ -56,7 +56,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
     }
 
-
+ //
     {
         JFrame frame = new JFrame();
         frame.setTitle("Control Panel");
