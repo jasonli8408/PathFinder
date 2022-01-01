@@ -64,7 +64,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         // Font size and style
         Font font = new Font("Verdana", Font.BOLD, 30);
 
-        JButton chooseStart, chooseEnd, chooseObstacles, findPath, incrementGridSize, decrementGridSize;
+        JButton clearObstacles, clearEverything, chooseObstacles, findPath, incrementGridSize, decrementGridSize;
 
         class RoundedBorder implements Border {
             private final int radius;
@@ -86,22 +86,39 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             }
         }
 
-        chooseStart = new JButton("Choose Start Node");
-        chooseStart.setSize(new Dimension(10, 40));
-        chooseStart.setBorder(new RoundedBorder(10));
-        chooseStart.addActionListener(new ActionListener() {
+        clearObstacles = new JButton("Clear Obstacles");
+        clearObstacles.setSize(new Dimension(10, 40));
+        clearObstacles.setBorder(new RoundedBorder(10));
+        clearObstacles.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "you have pressed the Clear Obstacles button");
+                //pathFinder = null;
+                blocks = new HashSet<>();
+                repaint();
 
+                JOptionPane.showMessageDialog(null, "Everything is cleared!");
             }
         });
 
-        chooseEnd = new JButton("Choose End Node");
-        chooseEnd.setSize(new Dimension(10, 40));
-        chooseEnd.setBorder(new RoundedBorder(10));
-        chooseEnd.addActionListener(new ActionListener() {
+        clearEverything = new JButton("Clear Everything");
+        clearEverything.setSize(new Dimension(10, 40));
+        clearEverything.setBorder(new RoundedBorder(10));
+        clearEverything.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "you have pressed the Clear Everything button");
+                blocks = new HashSet<>();
+                endNode = null;
+                startNode = null;
+                pathFinderStartNode = null;
+                pathFinderEndNode = null;
+                isEndOn ++;
+                isStartOn ++;
+                path = null;
+                repaint();
+
+                JOptionPane.showMessageDialog(null, "Everything is cleared!");
             }
         });
 
@@ -158,8 +175,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
         JPanel p2 = new JPanel();
         p2.setLayout(new GridLayout(6,1));
-        p2.add(chooseStart);
-        p2.add(chooseEnd);
+        p2.add(clearObstacles);
+        p2.add(clearEverything);
         p2.add(chooseObstacles);
         p2.add(findPath);
         p2.add(incrementGridSize);
@@ -316,9 +333,9 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     }
 
     @Override
-    public void update(Observable o, Object arg) {
+   public void update(Observable o, Object arg) {
         String operation = (String) arg;
         PathFinder p =
         if (arg.equals())
-    }
+  }
 }

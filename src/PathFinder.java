@@ -10,8 +10,6 @@ public class PathFinder extends Observable {
     private final Grid grid;
     private final List<Node> path;
     public Boolean hasSolution;
-    public static final String closedListOperation = "CLOSED";
-    public static final String openListOperations = "OPEN";
 
 
 
@@ -39,8 +37,8 @@ public class PathFinder extends Observable {
             if (current.equals(endNode)) {
                 return current;
             }
-            closedListAdd(current);
-            openListRemove(current);
+            listChanged(2,current);
+            listChanged(1,current);
 
 
             //find all the children! and assign it to the arraylistsw
@@ -59,7 +57,7 @@ public class PathFinder extends Observable {
                         child.parent = current;
                         child.g = tempG;
                         child.f = child.g + child.calcH(endNode);
-                        openListAdd(child);
+                        listChanged(0,child);
                     } else { //
                         if (openList.contains(child)) {
                             if (tempG < child.g) {
@@ -70,8 +68,8 @@ public class PathFinder extends Observable {
                             }
                             if (closedList.contains(child)) {
                                 if (tempG < child.g) {
-                                    closedListRemove(child);
-                                    openListAdd(child);
+                                    listChanged(3,child);
+                                    listChanged(0,child);
                                     child.g = tempG;
                                     child.parent = current;
                                     child.f = child.g + child.calcH(endNode);
@@ -171,43 +169,22 @@ public class PathFinder extends Observable {
         }
     }
 
-    public PriorityQueue<Node> getClosed() {
-        return closedList;
-    }
-
-    public PriorityQueue<Node> getOpenList() {
-        return openList;
-    }
-
-
-    public void openListChanged(int operation, Node child) {
+    public void listChanged(int operation, Node child) {
         setChanged();
         if (operation == 0) {
-            openListAdd(child);
-            notifyObservers(openListOperations);
+            openList.add(child);
+            notifyObservers("Open List child added");
         } else if (operation == 1){
-            openListRemove(child);
-            notifyObservers(openListOperations);
+            openList.remove(child);
+            notifyObservers("Open List child removed");
         } else if (operation == 2){
-            closedListAdd(child);
-            notifyObservers(closedListOperation);
+            closedList.add(child);
+            notifyObservers("Closed List child added");
         } else if (operation == 3){
-            closedListRemove(child);
-            notifyObservers(closedListOperation);
+            closedList.remove(child);
+            notifyObservers("Closed List child removed");
         }
 
     }
 
-    void openListAdd(Node n){
-        openList.add(n);
-    }
-    void openListRemove(Node n){
-        openList.remove(n);
-    }
-    void closedListAdd(Node n){
-        closedList.add(n);
-    }
-    void closedListRemove(Node n){
-        closedList.remove(n);
-    }
 }
