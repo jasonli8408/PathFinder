@@ -24,7 +24,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
 
-    //
+
     public GUI() {
 
         path = null;
@@ -95,7 +95,9 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 JOptionPane.showMessageDialog(null, "you have pressed the Clear Obstacles button");
                 //pathFinder = null;
                 blocks = new HashSet<>();
+                path = null;
                 repaint();
+
 
                 JOptionPane.showMessageDialog(null, "Everything is cleared!");
             }
@@ -335,7 +337,13 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     @Override
    public void update(Observable o, Object arg) {
         String operation = (String) arg;
-        PathFinder p =
-        if (arg.equals())
+        PathFinder p = (PathFinder) o;
+        if (arg.equals(p.CLOSED)) {
+            PriorityQueue<Node> closedList = p.getClosed();
+
+        } else if (arg.equals(PathFinder.OPEN)) {
+            PriorityQueue<Node> openList = p.getOpenList();
+
+        }
   }
 }
