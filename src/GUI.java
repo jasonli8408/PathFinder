@@ -98,10 +98,12 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 JOptionPane.showMessageDialog(null, "you have pressed the Clear Obstacles button");
                 //pathFinder = null;
                 blocks = new HashSet<>();
+                closedNodes = new PriorityQueue<>();
+                openNodes = new PriorityQueue<>();
                 path = null;
                 repaint();
 
-                JOptionPane.showMessageDialog(null, "Everything is cleared!");
+                JOptionPane.showMessageDialog(null, "Obstacles are cleared!");
             }
         });
 
@@ -120,6 +122,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 isEndOn ++;
                 isStartOn ++;
                 path = null;
+                closedNodes = new PriorityQueue<>();
+                openNodes = new PriorityQueue<>();
                 repaint();
 
                 JOptionPane.showMessageDialog(null, "Everything is cleared!");
