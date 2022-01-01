@@ -77,7 +77,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         // Font size and style
         Font font = new Font("Verdana", Font.BOLD, 30);
 
-        JButton chooseStart, chooseEnd, chooseObstacles, findPath, incrementGridSize, decrementGridSize;
+        JButton clearObstacles, chooseEnd, chooseObstacles, findPath, incrementGridSize, decrementGridSize;
 
         class RoundedBorder implements Border {
             private final int radius;
@@ -99,33 +99,21 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             }
         }
 
-        chooseStart = new JButton("Choose Start Node");
-        chooseStart.setSize(new Dimension(10, 40));
-        chooseStart.setBorder(new RoundedBorder(10));
-        chooseStart.addActionListener(new ActionListener() {
+        clearObstacles = new JButton("Clear Obstacles");
+        clearObstacles.setSize(new Dimension(10, 40));
+        clearObstacles.setBorder(new RoundedBorder(10));
+        clearObstacles.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "you have pressed the Clear Obstacles button");
+                //pathFinder = null;
+                blocks = new HashSet<>();
+                repaint();
 
+                JOptionPane.showMessageDialog(null, "Everything is cleared!");
             }
         });
 
-        chooseEnd = new JButton("Choose End Node");
-        chooseEnd.setSize(new Dimension(10, 40));
-        chooseEnd.setBorder(new RoundedBorder(10));
-        chooseEnd.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-
-        chooseObstacles = new JButton("Create Obstacles");
-        chooseObstacles.setSize(new Dimension(10, 40));
-        chooseObstacles.setBorder(new RoundedBorder(10));
-        chooseObstacles.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
 
         findPath = new JButton("A* Find Path");
         findPath.setSize(new Dimension(10, 40));
@@ -133,6 +121,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         findPath.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "you have pressed the Find Path button");
                 if (pathFinderEndNode != null && pathFinderStartNode != null) {
                     pathFinder = new PathFinder(pathFinderStartNode, pathFinderEndNode, 900/30, 900/30);
                     for (Node block : blocks) {
@@ -175,9 +164,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
         JPanel p2 = new JPanel();
         p2.setLayout(new GridLayout(6,1));
-        p2.add(chooseStart);
-        p2.add(chooseEnd);
-        p2.add(chooseObstacles);
+        p2.add(clearObstacles);
         p2.add(findPath);
         p2.add(incrementGridSize);
         p2.add(decrementGridSize);
@@ -272,13 +259,12 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
                 if (startNode == null) {
                     startNode = new Node(e.getX() - xSub, e.getY() - ySub);
-                    pathFinderStartNode = new Node(startNode.getX() / 30 , startNode.getY() / 30 );
+                    pathFinderStartNode = new Node(startNode.getX() / 30, startNode.getY() / 30);
                 }
 
                 repaint();
+
             }
-
-
 
 
             if (pathFinderEndNode != null && pathFinderStartNode != null) {
