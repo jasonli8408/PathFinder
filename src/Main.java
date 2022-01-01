@@ -12,5 +12,6 @@ public class Main {
 //        List<Node> path = pathFinder.findPath(end);
 //        System.out.println(path);
         new GUI();
+
     }
 }

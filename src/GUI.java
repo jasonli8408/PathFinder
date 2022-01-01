@@ -260,9 +260,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
 
-            if (pathFinderEndNode != null && pathFinderStartNode != null) {
-                pathFinder = new PathFinder(pathFinderStartNode, pathFinderEndNode, 900 / 30, 900 / 30);
-            }
+
         }
     }
 
@@ -319,6 +317,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
     @Override
     public void update(Observable o, Object arg) {
-
+        String operation = (String) arg;
+        PathFinder p =
+        if (arg.equals())
     }
 }
