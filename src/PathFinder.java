@@ -28,7 +28,6 @@ public class PathFinder {
         openList.add(start);
         grid = new Grid(row, col);
         path = new LinkedList<>();
-        hasSolution = false;
     }
 
     public Grid getGrid() {
@@ -41,11 +40,12 @@ public class PathFinder {
             if (current.equals(endNode)) {
                 return current;
             }
-            closedList.add(current);
-            openList.remove(current);
+            closedListAdd(current);
+            openListRemove(current);
 
 
             //find all the children! and assign it to the arraylistsw
+
             List<Node> children = findChildren(current);
             for (Node child : children) {
                 if (child != null) {
@@ -57,12 +57,10 @@ public class PathFinder {
                     }
 
                     if (!openList.contains(child) && !closedList.contains(child)) {
-
                         child.parent = current;
                         child.g = tempG;
                         child.f = child.g + child.calcH(endNode);
-                        openList.add(child);
-
+                        openListAdd(child);
                     } else { //
                         if (openList.contains(child)) {
                             if (tempG < child.g) {
@@ -73,8 +71,8 @@ public class PathFinder {
                             }
                             if (closedList.contains(child)) {
                                 if (tempG < child.g) {
-                                    closedList.remove(child);
-                                    openList.add(child);
+                                    closedListAdd(child);
+                                    openListAdd(child);
                                     child.g = tempG;
                                     child.parent = current;
                                     child.f = child.g + child.calcH(endNode);
@@ -179,5 +177,18 @@ public class PathFinder {
         } else{
             return null;
         }
+    }
+
+    void openListAdd(Node n){
+        openList.add(n);
+    }
+    void openListRemove(Node n){
+        openList.remove(n);
+    }
+    void closedListAdd(Node n){
+        closedList.add(n);
+    }
+    void closedListRemove(Node n){
+        closedList.remove(n);
     }
 }
