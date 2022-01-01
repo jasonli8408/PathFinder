@@ -2,7 +2,9 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class GUI extends JPanel implements MouseWheelListener, MouseListener, KeyListener, ActionListener, MouseMotionListener{
@@ -18,6 +20,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private Node pathFinderEndNode;
     private Node pathFinderStartNode;
     private List<Node> path;
+    private Set<Node> blocks;
 
 
 
@@ -26,6 +29,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     public GUI() {
 
         path = null;
+
+        blocks = new HashSet<>();
         pathFinderEndNode = null;
         pathFinderStartNode = null;
         addMouseListener(this);
@@ -118,8 +123,14 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             public void actionPerformed(ActionEvent e) {
                 if (pathFinderEndNode != null && pathFinderStartNode != null) {
                     pathFinder = new PathFinder(pathFinderStartNode, pathFinderEndNode, 900/30, 900/30);
+                    for (Node block : blocks) {
+                        Node pathfindingBlock = new Node(block.getX() / 30 , block.getY() / 30);
+                        pathfindingBlock.flipNode();
+                    }
+
 
                     path = pathFinder.findPath(pathFinder.aStar());
+
                     repaint();
                 }
             }
@@ -192,6 +203,13 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             path.remove(pathFinderStartNode);
             for (Node node : path) {
                 g.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
+            }
+        }
+
+        if (blocks != null) {
+            g.setColor(Color.black);
+            for (Node block : blocks) {
+                g.fillRect(block.getX() + 1, block.getY() + 1, gridDimention - 1, gridDimention - 1);
             }
         }
     }
@@ -282,10 +300,16 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        int xSub = e.getX() % gridDimention;
+        int ySub = e.getY() % gridDimention;
+
         if (SwingUtilities.isLeftMouseButton(e)) {
             if (keyRightNow == 'b') {
+                Node block = new Node(e.getX() - xSub, e.getY() - ySub);
+                blocks.add(block);
 
             }
+            repaint();
         }
     }
 
