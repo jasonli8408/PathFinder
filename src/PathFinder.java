@@ -189,7 +189,6 @@ public class PathFinder extends Observable {
 
     void openListAdd(Node n){
         openList.add(n);
-
     }
     void openListRemove(Node n){
         openList.remove(n);
