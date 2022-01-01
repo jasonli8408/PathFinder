@@ -12,7 +12,7 @@ public class PathFinder {
     private Node endNode;
     private Grid grid;
     private List<Node> path;
-    private Boolean hasSolution;
+    public Boolean hasSolution;
 
 
 
@@ -48,42 +48,45 @@ public class PathFinder {
             //find all the children! and assign it to the arraylistsw
             List<Node> children = findChildren(current);
             for (Node child : children) {
-                double tempG;
-                if (Math.abs(current.getX() - child.getX()) == 1 && Math.abs(current.getY() - child.getY()) == 1) {
-                    tempG = current.g + 1.4;
-                } else {
-                    tempG = current.g + 1;
-                }
+                if (child != null) {
+                    double tempG;
+                    if (Math.abs(current.getX() - child.getX()) == 1 && Math.abs(current.getY() - child.getY()) == 1) {
+                        tempG = current.g + 1.4;
+                    } else {
+                        tempG = current.g + 1;
+                    }
 
-                if (!openList.contains(child) && !closedList.contains(child)) {
+                    if (!openList.contains(child) && !closedList.contains(child)) {
 
-                    child.parent = current;
-                    child.g = tempG;
-                    child.f = child.g + child.calcH(endNode);
-                    openList.add(child);
+                        child.parent = current;
+                        child.g = tempG;
+                        child.f = child.g + child.calcH(endNode);
+                        openList.add(child);
 
-                } else  { //
-                    if (openList.contains(child)) {
-                        if (tempG < child.g) {
-                            child.g = tempG;
-                            child.parent = current;
-                            child.f = child.g + child.calcH(endNode);
-
-                        }
-                        if (closedList.contains(child)) {
+                    } else { //
+                        if (openList.contains(child)) {
                             if (tempG < child.g) {
-                                closedList.remove(child);
-                                openList.add(child);
                                 child.g = tempG;
                                 child.parent = current;
                                 child.f = child.g + child.calcH(endNode);
+
+                            }
+                            if (closedList.contains(child)) {
+                                if (tempG < child.g) {
+                                    closedList.remove(child);
+                                    openList.add(child);
+                                    child.g = tempG;
+                                    child.parent = current;
+                                    child.f = child.g + child.calcH(endNode);
+                                }
                             }
                         }
                     }
+
+
                 }
-
-
             }
+            hasSolution = true;
 
 
         }
@@ -92,9 +95,12 @@ public class PathFinder {
 
     }
 
+
+
     public List<Node> findPath(Node end) {
         if (!hasSolution) {
             hasSolution = false;
+
         }
         //since each node only has ONE parent, we can simply traverse back to the starting point
         if (end == null) {

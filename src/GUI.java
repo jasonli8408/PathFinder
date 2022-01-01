@@ -125,13 +125,15 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                     pathFinder = new PathFinder(pathFinderStartNode, pathFinderEndNode, 900/30, 900/30);
                     for (Node block : blocks) {
 
-                        Node pathfindingBlock = new Node(block.getX() / 30 == 0 ? 0 : block.getX() / 30 - 1 ,
-                                block.getY() / 30 == 0 ? 0 : block.getY() / 30 - 1);
+                        Node pathfindingBlock = new Node(block.getX() / 30 ,block.getY() / 30
+                                  );
                         pathFinder.getGrid().flipNode(pathfindingBlock.getX(), pathfindingBlock.getY());
                     }
-
-
                     path = pathFinder.findPath(pathFinder.aStar());
+                    if (!pathFinder.hasSolution) {
+                        JOptionPane.showMessageDialog(null,"there is no path to the end point");
+                    }
+
 
                     repaint();
                 }
@@ -181,9 +183,9 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
         g.setColor(Color.lightGray);
-        for (int y = 0; y < this.getHeight(); y += gridDimention) {
+        for (int y = 0; y < this.getHeight(); y += gridDimention) { //cp
             for (int x = 0; x < this.getWidth(); x += gridDimention) {
-                g.drawRect(x, y , gridDimention, gridDimention);
+                g.drawRect(y, x , gridDimention, gridDimention);
             }
         }
 
@@ -241,8 +243,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 int ySub = e.getY() % gridDimention;
                 if (isEndOn % 2 == 1 && endNode == null) {
                     endNode = new Node(e.getX() - xSub, e.getY() - ySub);
-                    pathFinderEndNode =  new Node(endNode.getX() / 30 == 0 ? 0 : endNode.getX() / 30  - 1 ,
-                            endNode.getY() / 30 == 0 ? 0 : endNode.getY() / 30  - 1);
+                    pathFinderEndNode =  new Node(endNode.getX() / 30 , endNode.getY() / 30 );
                 }
                 else{
                     endNode = null;
@@ -255,7 +256,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
                 if (startNode == null) {
                     startNode = new Node(e.getX() - xSub, e.getY() - ySub);
-                    pathFinderStartNode = new Node(endNode.getX() / 30 == 0 ? 0 : endNode.getX() / 30  - 1,  endNode.getY() / 30 == 0 ? 0 : endNode.getY() / 30  - 1);
+                    pathFinderStartNode = new Node(startNode.getX() / 30 , startNode.getY() / 30 );
                 }
 
                 repaint();
