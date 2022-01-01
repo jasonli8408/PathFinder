@@ -21,8 +21,20 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private Node pathFinderStartNode;
     private List<Node> path;
     private Set<Node> blocks;
+    int height = 900;
+    int width = 900;
 
+    public void increment(){
+        height += 300;
+        width += 300;
+    }
 
+    public void decrement(){
+        if (height >= 300 && width >= 300) {
+            height -= 300;
+            width -= 300;
+        }
+    }
 
 
     //
@@ -44,7 +56,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         endNode = null;
         window = new JFrame();
         window.setContentPane(this);
-        window.getContentPane().setPreferredSize(new Dimension(900,900));
+        window.getContentPane().setPreferredSize(new Dimension(width,height));
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //how it would close
         window.setTitle("A* algorithm");
@@ -146,6 +158,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         incrementGridSize.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "you have pressed the Increment button");
+                increment();
             }
         });
         decrementGridSize = new JButton("Decrement Grid Size");
@@ -154,6 +168,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         decrementGridSize.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "you have pressed the Decrement button");
+                decrement();
             }
         });
 
