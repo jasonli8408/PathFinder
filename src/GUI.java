@@ -125,7 +125,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                     pathFinder = new PathFinder(pathFinderStartNode, pathFinderEndNode, 900/30, 900/30);
                     for (Node block : blocks) {
                         Node pathfindingBlock = new Node(block.getX() / 30 , block.getY() / 30);
-                        pathfindingBlock.flipNode();
+                        pathFinder.getGrid().flipNode(pathfindingBlock.getX(), pathfindingBlock.getY());
                     }
 
 
