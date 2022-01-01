@@ -71,7 +71,7 @@ public class PathFinder {
                             }
                             if (closedList.contains(child)) {
                                 if (tempG < child.g) {
-                                    closedListAdd(child);
+                                    closedListRemove(child);
                                     openListAdd(child);
                                     child.g = tempG;
                                     child.parent = current;
@@ -181,6 +181,7 @@ public class PathFinder {
 
     void openListAdd(Node n){
         openList.add(n);
+
     }
     void openListRemove(Node n){
         openList.remove(n);
