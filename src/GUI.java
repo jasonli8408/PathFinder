@@ -179,16 +179,12 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-
-
         g.setColor(Color.lightGray);
         for (int y = 0; y < this.getHeight(); y += gridDimention) { //cp
             for (int x = 0; x < this.getWidth(); x += gridDimention) {
                 g.drawRect(y, x , gridDimention, gridDimention);
             }
         }
-
-
 
         if (endNode != null) {
             g.setColor(Color.red);
