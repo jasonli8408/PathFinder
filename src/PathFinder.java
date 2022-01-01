@@ -179,18 +179,22 @@ public class PathFinder extends Observable {
 
 
     public void ListChanged(int operation, Node child) {
-        setChanged();
+
         if (operation == 0) {
             openListAdd(child);
+            setChanged();
             notifyObservers(OPEN);
         } else if (operation == 1){
             openListRemove(child);
+            setChanged();
             notifyObservers(OPEN);
         } else if (operation == 2){
             closedListAdd(child);
+            setChanged();
             notifyObservers(CLOSED);
         } else if (operation == 3){
             closedListRemove(child);
+            setChanged();
             notifyObservers(CLOSED);
         }
 

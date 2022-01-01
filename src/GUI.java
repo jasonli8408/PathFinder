@@ -134,6 +134,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             public void actionPerformed(ActionEvent e) {
                 if (pathFinderEndNode != null && pathFinderStartNode != null) {
                     pathFinder = new PathFinder(pathFinderStartNode, pathFinderEndNode, 900/30, 900/30);
+                    pathFinder.addObserver(GUI.this);
                     for (Node block : blocks) {
 
                         Node pathfindingBlock = new Node(block.getX() / 30 ,block.getY() / 30
@@ -190,6 +191,21 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+
+        g.setColor(Color.MAGENTA);
+        for (Node node : closedNodes) {
+
+                g.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
+
+        }
+
+        g.setColor(Color.green);
+        for (Node node : openNodes) {
+
+                g.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
+
+        }
+
         g.setColor(Color.lightGray);
         for (int y = 0; y < this.getHeight(); y += gridDimention) { //cp
             for (int x = 0; x < this.getWidth(); x += gridDimention) {
@@ -223,15 +239,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             }
         }
 
-        g.setColor(Color.MAGENTA);
-        for (Node node : closedNodes) {
-            g.fillRect(node.getX() + 1, node.getY() + 1, gridDimention - 1, gridDimention - 1);
-        }
-
-        g.setColor(Color.green);
-        for (Node node : openNodes) {
-            g.fillRect(node.getX() + 1, node.getY() + 1, gridDimention - 1, gridDimention - 1);
-        }
     }
 
     @Override
