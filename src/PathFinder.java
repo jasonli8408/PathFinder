@@ -1,11 +1,8 @@
 import com.sun.org.apache.xpath.internal.operations.Bool;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
-public class PathFinder {
+public class PathFinder extends Observable {
     private final PriorityQueue<Node> closedList;
     private final PriorityQueue<Node> openList;
     private final Node startNode;
@@ -80,20 +77,13 @@ public class PathFinder {
                             }
                         }
                     }
-
-
                 }
             }
             hasSolution = true;
-
-
         }
         hasSolution = false;
         return null;
-
     }
-
-
 
     public List<Node> findPath(Node end) {
         if (!hasSolution) {
@@ -177,6 +167,24 @@ public class PathFinder {
         } else{
             return null;
         }
+    }
+
+    public void openListChanged(int operation, Node child) {
+        setChanged();
+        if (operation == 0) {
+            openListAdd(child);
+            notifyObservers("Open List child added");
+        } else if (operation == 1){
+            openListRemove(child);
+            notifyObservers("Open List child removed");
+        } else if (operation == 2){
+            closedListAdd(child);
+            notifyObservers("Closed List child added");
+        } else if (operation == 3){
+            closedListRemove(child);
+            notifyObservers("Closed List child removed");
+        }
+
     }
 
     void openListAdd(Node n){
