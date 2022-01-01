@@ -77,7 +77,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         // Font size and style
         Font font = new Font("Verdana", Font.BOLD, 30);
 
-        JButton clearObstacles, chooseEnd, chooseObstacles, findPath, incrementGridSize, decrementGridSize;
+        JButton clearObstacles, clearEverything, findPath, incrementGridSize, decrementGridSize;
 
         class RoundedBorder implements Border {
             private final int radius;
@@ -99,6 +99,28 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             }
         }
 
+        clearEverything = new JButton("Clear Everything");
+        clearEverything.setSize(new Dimension(10, 40));
+        clearEverything.setBorder(new RoundedBorder(10));
+        clearEverything.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "you have pressed the Clear Everything button");
+                blocks = new HashSet<>();
+                endNode = null;
+                startNode = null;
+                pathFinderStartNode = null;
+                pathFinderEndNode = null;
+                isEndOn ++;
+                isStartOn ++;
+                path = null;
+                repaint();
+
+                JOptionPane.showMessageDialog(null, "Everything is cleared!");
+            }
+        });
+
+
         clearObstacles = new JButton("Clear Obstacles");
         clearObstacles.setSize(new Dimension(10, 40));
         clearObstacles.setBorder(new RoundedBorder(10));
@@ -106,11 +128,10 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "you have pressed the Clear Obstacles button");
-                //pathFinder = null;
                 blocks = new HashSet<>();
+                path = null;
                 repaint();
-
-                JOptionPane.showMessageDialog(null, "Everything is cleared!");
+                JOptionPane.showMessageDialog(null, "Obstacles are cleared!");
             }
         });
 
@@ -134,9 +155,13 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                     if (!pathFinder.hasSolution) {
                         JOptionPane.showMessageDialog(null,"there is no path to the end point");
                     }
-
-
                     repaint();
+                } else if (pathFinderEndNode == null && pathFinderStartNode == null){
+                    JOptionPane.showMessageDialog(null, "Please indicate start node and end node.");
+                } else if (pathFinderEndNode == null){
+                    JOptionPane.showMessageDialog(null, "Please indicate end node.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please indicate start node.");
                 }
             }
         });
@@ -164,6 +189,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
         JPanel p2 = new JPanel();
         p2.setLayout(new GridLayout(6,1));
+        p2.add(clearEverything);
         p2.add(clearObstacles);
         p2.add(findPath);
         p2.add(incrementGridSize);
@@ -254,14 +280,14 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 repaint();
 
             } else if (keyRightNow == 's' || keyRightNow == 'S') {
+                isStartOn++;
                 int xSub = e.getX() % gridDimention;
                 int ySub = e.getY() % gridDimention;
 
-                if (startNode == null) {
+                if (isStartOn % 2 == 1 && startNode == null) {
                     startNode = new Node(e.getX() - xSub, e.getY() - ySub);
                     pathFinderStartNode = new Node(startNode.getX() / 30, startNode.getY() / 30);
                 }
-
                 repaint();
 
             }
