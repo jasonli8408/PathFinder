@@ -26,7 +26,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
 
-
+    //
     public GUI() {
 
         path = null;
@@ -101,7 +101,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 path = null;
                 repaint();
 
-
                 JOptionPane.showMessageDialog(null, "Everything is cleared!");
             }
         });
@@ -124,15 +123,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 repaint();
 
                 JOptionPane.showMessageDialog(null, "Everything is cleared!");
-            }
-        });
-
-        chooseObstacles = new JButton("Create Obstacles");
-        chooseObstacles.setSize(new Dimension(10, 40));
-        chooseObstacles.setBorder(new RoundedBorder(10));
-        chooseObstacles.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
             }
         });
 
@@ -182,7 +172,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         p2.setLayout(new GridLayout(6,1));
         p2.add(clearObstacles);
         p2.add(clearEverything);
-        p2.add(chooseObstacles);
         p2.add(findPath);
         p2.add(incrementGridSize);
         p2.add(decrementGridSize);
