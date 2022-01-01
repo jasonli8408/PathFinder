@@ -168,6 +168,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             g.setColor(Color.blue);
             g.fillRect(startNode.getX() + 1, startNode.getY() + 1, gridDimention - 1, gridDimention - 1);
         }
+
     }
 
     @Override
@@ -201,16 +202,22 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 }
                 repaint();
 
-            } else if (keyRightNow == 's' || keyRightNow == 'S') {
+            }
+            else if (keyRightNow == 's' || keyRightNow == 'S') {
+                isStartOn++;
                 int xSub = e.getX() % gridDimention;
                 int ySub = e.getY() % gridDimention;
-
-                if (startNode == null) {
+                if (isStartOn % 2 == 1 && endNode == null) {
                     startNode = new Node(e.getX() - xSub, e.getY() - ySub);
                 }
-
+                else{
+                    startNode = null;
+                }
                 repaint();
             }
+
+
+
 
 
 
