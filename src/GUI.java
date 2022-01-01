@@ -20,6 +20,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private Node pathFinderStartNode;
     private List<Node> path;
     private Set<Node> blocks;
+    private PriorityQueue<Node> closedNodes;
+    private PriorityQueue<Node> openNodes;
 
 
 
@@ -28,7 +30,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     public GUI() {
 
         path = null;
-
+        closedNodes = new PriorityQueue<>();
+        openNodes = new PriorityQueue<>();
         blocks = new HashSet<>();
         pathFinderEndNode = null;
         pathFinderStartNode = null;
@@ -216,7 +219,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         }
 
         if (path != null) {
-            g.setColor(Color.green);
+            g.setColor(Color.CYAN);
             path.remove(pathFinderEndNode);
             path.remove(pathFinderStartNode);
             for (Node node : path) {
@@ -229,6 +232,16 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             for (Node block : blocks) {
                 g.fillRect(block.getX() + 1, block.getY() + 1, gridDimention - 1, gridDimention - 1);
             }
+        }
+
+        g.setColor(Color.MAGENTA);
+        for (Node node : closedNodes) {
+            g.fillRect(node.getX() + 1, node.getY() + 1, gridDimention - 1, gridDimention - 1);
+        }
+
+        g.setColor(Color.green);
+        for (Node node : openNodes) {
+            g.fillRect(node.getX() + 1, node.getY() + 1, gridDimention - 1, gridDimention - 1);
         }
     }
 
@@ -338,11 +351,12 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
    public void update(Observable o, Object arg) {
         String operation = (String) arg;
         PathFinder p = (PathFinder) o;
-        if (arg.equals(p.CLOSED)) {
+        if (operation.equals(p.CLOSED)) {
             PriorityQueue<Node> closedList = p.getClosed();
-
-        } else if (arg.equals(PathFinder.OPEN)) {
+            closedNodes = closedList;
+        } else if (operation.equals(PathFinder.OPEN)) {
             PriorityQueue<Node> openList = p.getOpenList();
+            openNodes = openList;
 
         }
   }
