@@ -20,15 +20,18 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private Node pathFinderStartNode;
     private List<Node> path;
     private Set<Node> blocks;
+    private PriorityQueue<Node> closedNodes;
+    private PriorityQueue<Node> openNodes;
 
 
 
 
-
+    //
     public GUI() {
 
         path = null;
-
+        closedNodes = new PriorityQueue<>();
+        openNodes = new PriorityQueue<>();
         blocks = new HashSet<>();
         pathFinderEndNode = null;
         pathFinderStartNode = null;
@@ -95,11 +98,12 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 JOptionPane.showMessageDialog(null, "you have pressed the Clear Obstacles button");
                 //pathFinder = null;
                 blocks = new HashSet<>();
+                closedNodes = new PriorityQueue<>();
+                openNodes = new PriorityQueue<>();
                 path = null;
                 repaint();
 
-
-                JOptionPane.showMessageDialog(null, "Everything is cleared!");
+                JOptionPane.showMessageDialog(null, "Obstacles are cleared!");
             }
         });
 
@@ -118,18 +122,11 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 isEndOn ++;
                 isStartOn ++;
                 path = null;
+                closedNodes = new PriorityQueue<>();
+                openNodes = new PriorityQueue<>();
                 repaint();
 
                 JOptionPane.showMessageDialog(null, "Everything is cleared!");
-            }
-        });
-
-        chooseObstacles = new JButton("Create Obstacles");
-        chooseObstacles.setSize(new Dimension(10, 40));
-        chooseObstacles.setBorder(new RoundedBorder(10));
-        chooseObstacles.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
             }
         });
 
@@ -141,6 +138,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             public void actionPerformed(ActionEvent e) {
                 if (pathFinderEndNode != null && pathFinderStartNode != null) {
                     pathFinder = new PathFinder(pathFinderStartNode, pathFinderEndNode, 900/30, 900/30);
+                    pathFinder.addObserver(GUI.this);
                     for (Node block : blocks) {
 
                         Node pathfindingBlock = new Node(block.getX() / 30 ,block.getY() / 30
@@ -179,7 +177,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         p2.setLayout(new GridLayout(6,1));
         p2.add(clearObstacles);
         p2.add(clearEverything);
-        p2.add(chooseObstacles);
         p2.add(findPath);
         p2.add(incrementGridSize);
         p2.add(decrementGridSize);
@@ -197,6 +194,21 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+
+        g.setColor(Color.MAGENTA);
+        for (Node node : closedNodes) {
+
+                g.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
+
+        }
+
+        g.setColor(Color.green);
+        for (Node node : openNodes) {
+
+                g.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
+
+        }
 
         g.setColor(Color.lightGray);
         for (int y = 0; y < this.getHeight(); y += gridDimention) { //cp
@@ -216,7 +228,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         }
 
         if (path != null) {
-            g.setColor(Color.green);
+            g.setColor(Color.CYAN);
             path.remove(pathFinderEndNode);
             path.remove(pathFinderStartNode);
             for (Node node : path) {
@@ -230,6 +242,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 g.fillRect(block.getX() + 1, block.getY() + 1, gridDimention - 1, gridDimention - 1);
             }
         }
+
     }
 
     @Override
@@ -338,11 +351,12 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
    public void update(Observable o, Object arg) {
         String operation = (String) arg;
         PathFinder p = (PathFinder) o;
-        if (arg.equals(p.CLOSED)) {
+        if (operation.equals(p.CLOSED)) {
             PriorityQueue<Node> closedList = p.getClosed();
-
-        } else if (arg.equals(PathFinder.OPEN)) {
+            closedNodes = closedList;
+        } else if (operation.equals(PathFinder.OPEN)) {
             PriorityQueue<Node> openList = p.getOpenList();
+            openNodes = openList;
 
         }
   }

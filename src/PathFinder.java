@@ -37,8 +37,8 @@ public class PathFinder extends Observable {
             if (current.equals(endNode)) {
                 return current;
             }
-            closedListAdd(current);
-            openListRemove(current);
+            ListChanged(2, current);
+            ListChanged(1, current);
 
 
             //find all the children! and assign it to the arraylistsw
@@ -57,7 +57,7 @@ public class PathFinder extends Observable {
                         child.parent = current;
                         child.g = tempG;
                         child.f = child.g + child.calcH(endNode);
-                        openListAdd(child);
+                        ListChanged(0, child);
                     } else { //
                         if (openList.contains(child)) {
                             if (tempG < child.g) {
@@ -68,8 +68,8 @@ public class PathFinder extends Observable {
                             }
                             if (closedList.contains(child)) {
                                 if (tempG < child.g) {
-                                    closedListRemove(child);
-                                    openListAdd(child);
+                                    ListChanged(3, child);
+                                    ListChanged(0, child);
                                     child.g = tempG;
                                     child.parent = current;
                                     child.f = child.g + child.calcH(endNode);
@@ -178,19 +178,23 @@ public class PathFinder extends Observable {
     }
 
 
-    public void openListChanged(int operation, Node child) {
-        setChanged();
+    public void ListChanged(int operation, Node child) {
+
         if (operation == 0) {
             openListAdd(child);
+            setChanged();
             notifyObservers(OPEN);
         } else if (operation == 1){
             openListRemove(child);
+            setChanged();
             notifyObservers(OPEN);
         } else if (operation == 2){
             closedListAdd(child);
+            setChanged();
             notifyObservers(CLOSED);
         } else if (operation == 3){
             closedListRemove(child);
+            setChanged();
             notifyObservers(CLOSED);
         }
 
