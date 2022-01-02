@@ -355,7 +355,12 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             PriorityQueue<Node> closedList = p.getClosed();
             closedNodes = closedList;
             Graphics x = getGraphics();
-            paintComponent(x);
+            x.setColor(Color.MAGENTA);
+            for (Node node : closedNodes) {
+                if (!node.equals(startNode)) {
+                    x.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
+                }
+            }
             try {
                 TimeUnit.MILLISECONDS.sleep(50);
             } catch (InterruptedException e) {
@@ -365,9 +370,15 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             PriorityQueue<Node> openList = p.getOpenList();
             openNodes = openList;
             Graphics x = getGraphics();
-            paintComponent(x);
+
+            x.setColor(Color.green);
+            for (Node node : openNodes) {
+
+                x.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
+
+            }
             try {
-            TimeUnit.MILLISECONDS.sleep(50);
+                TimeUnit.MILLISECONDS.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
