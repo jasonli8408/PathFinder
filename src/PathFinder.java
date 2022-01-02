@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class PathFinder extends Observable {
     private final PriorityQueue<Node> closedList;
@@ -137,7 +138,7 @@ public class PathFinder extends Observable {
             children.add(addChildren(0, y + 1));
             children.add(addChildren(1, y - 1));
             children.add(addChildren(1, y));
-            children.add(addChildren(1, y - 1));
+            children.add(addChildren(1, y + 1));
         } else if (node.getX() == rows - 1) {
             children.add(addChildren(rows - 1, y - 1));
             children.add(addChildren(rows - 1, y + 1));
@@ -184,14 +185,17 @@ public class PathFinder extends Observable {
             openListAdd(child);
             setChanged();
             notifyObservers(OPEN);
+
         } else if (operation == 1){
             openListRemove(child);
             setChanged();
             notifyObservers(OPEN);
+
         } else if (operation == 2){
             closedListAdd(child);
             setChanged();
             notifyObservers(CLOSED);
+
         } else if (operation == 3){
             closedListRemove(child);
             setChanged();
