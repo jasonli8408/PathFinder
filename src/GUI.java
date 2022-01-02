@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.util.List;
-import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 
@@ -28,10 +27,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
 
-
     //
     public GUI() {
-
 
         path = null;
         closedNodes = new PriorityQueue<>();
@@ -145,19 +142,14 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                     pathFinder.addObserver(GUI.this);
                     for (Node block : blocks) {
 
-
-                        Node pathfindingBlock = new Node(block.getX() / 30 == 30 ? 29 : block.getX() / 30 ,block.getY() / 30 == 30 ? 29 : block.getY() / 30
-                        );
+                        Node pathfindingBlock = new Node(block.getX() / 30 ,block.getY() / 30
+                                  );
                         pathFinder.getGrid().flipNode(pathfindingBlock.getX(), pathfindingBlock.getY());
                     }
-                    pathFinder.aStar();
-
-
-                    //
+                    path = pathFinder.findPath(pathFinder.aStar());
                     if (!pathFinder.hasSolution) {
                         JOptionPane.showMessageDialog(null,"there is no path to the end point");
                     }
-
 
                     repaint();
                 }
@@ -203,23 +195,18 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        try {
-            TimeUnit.MILLISECONDS.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         g.setColor(Color.MAGENTA);
         for (Node node : closedNodes) {
-            g.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
 
+                g.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
 
         }
 
         g.setColor(Color.green);
         for (Node node : openNodes) {
-            g.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
 
+                g.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
 
         }
 
@@ -367,9 +354,23 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         if (operation.equals(p.CLOSED)) {
             PriorityQueue<Node> closedList = p.getClosed();
             closedNodes = closedList;
+            Graphics x = getGraphics();
+            paintComponent(x);
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } else if (operation.equals(PathFinder.OPEN)) {
             PriorityQueue<Node> openList = p.getOpenList();
             openNodes = openList;
+            Graphics x = getGraphics();
+            paintComponent(x);
+            try {
+            TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
   }
 }
