@@ -151,6 +151,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                     }
                     path = pathFinder.findPath(pathFinder.aStar());
 
+                    //
                     if (!pathFinder.hasSolution) {
                         JOptionPane.showMessageDialog(null,"there is no path to the end point");
                     }
