@@ -186,20 +186,26 @@ public class PathFinder extends Observable {
             setChanged();
             notifyObservers(OPEN);
 
+
         } else if (operation == 1){
             openList.remove(child);
             setChanged();
             notifyObservers(OPEN);
+
+
 
         } else if (operation == 2){
             closedList.add(child);
             setChanged();
             notifyObservers(CLOSED);
 
+
+
         } else if (operation == 3){
             closedList.remove(child);
             setChanged();
             notifyObservers(CLOSED);
+
         }
 
     }
