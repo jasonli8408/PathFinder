@@ -2,17 +2,18 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.AffineTransform;
 import java.util.*;
 import java.util.List;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 
-public class GUI extends JPanel implements MouseWheelListener, MouseListener, KeyListener, ActionListener, MouseMotionListener, Observer {
+public class GUI extends JPanel implements MouseWheelListener, MouseListener, KeyListener, ActionListener, MouseMotionListener, Observer{
 
     private JFrame window;
     private PathFinder pathFinder;
-    private final static int gridDimention = 30;
+    private final static int gridDimention = 10;
     private Character keyRightNow;
     private Node startNode;
     private Node endNode;
@@ -24,15 +25,20 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private Set<Node> blocks;
     private PriorityQueue<Node> closedNodes;
     private PriorityQueue<Node> openNodes;
+    private int height;
+    private int width;
+    private static final int INCREMENT_SIZE = 300;
 
 
 
 
 
-    //
+
     public GUI() {
 
 
+        height = 90000;
+        width = 90000;
         path = null;
         closedNodes = new PriorityQueue<>();
         openNodes = new PriorityQueue<>();
@@ -40,7 +46,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         pathFinderEndNode = null;
         pathFinderStartNode = null;
         addMouseListener(this);
-        addMouseWheelListener(this);
         addKeyListener(this);
         addMouseMotionListener(this);
         setFocusable(true);
@@ -62,7 +67,9 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
     }
 
- //
+
+
+    //
     {
         JFrame frame = new JFrame();
         frame.setTitle("Control Panel");
@@ -142,12 +149,12 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (pathFinderEndNode != null && pathFinderStartNode != null) {
-                    pathFinder = new PathFinder(pathFinderStartNode, pathFinderEndNode, 900/30, 900/30);
+                    pathFinder = new PathFinder(pathFinderStartNode, pathFinderEndNode, 900/gridDimention, 900/gridDimention);
                     pathFinder.addObserver(GUI.this);
                     for (Node block : blocks) {
 
 
-                        Node pathfindingBlock = new Node(block.getX() / 30 == 30 ? 29 : block.getX() / 30 ,block.getY() / 30 == 30 ? 29 : block.getY() / 30
+                        Node pathfindingBlock = new Node(block.getX() / gridDimention == 90 ? 89 : block.getX() / gridDimention ,block.getY() / gridDimention == 90 ? 89 : block.getY() / gridDimention
                         );
                         pathFinder.getGrid().flipNode(pathfindingBlock.getX(), pathfindingBlock.getY());
                     }
@@ -165,31 +172,12 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             }
         });
 
-        incrementGridSize = new JButton("Increment Grid Size");
-        incrementGridSize.setSize(new Dimension(10, 40));
-        incrementGridSize.setBorder(new RoundedBorder(10));
-        incrementGridSize.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-        decrementGridSize = new JButton("Decrement Grid Size");
-        decrementGridSize.setSize(new Dimension(10, 40));
-        decrementGridSize.setBorder(new RoundedBorder(10));
-        decrementGridSize.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
 
         JPanel p2 = new JPanel();
-        p2.setLayout(new GridLayout(6,1));
+        p2.setLayout(new GridLayout(3,1));
         p2.add(clearObstacles);
         p2.add(clearEverything);
         p2.add(findPath);
-        p2.add(incrementGridSize);
-        p2.add(decrementGridSize);
-
 
         frame.setLayout(new BorderLayout());
         frame.add(p2,BorderLayout.LINE_END);
@@ -204,16 +192,18 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+
+
         g.setColor(Color.MAGENTA);
         for (Node node : closedNodes) {
 
-            g.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
+            g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
         }
 
         g.setColor(Color.green);
         for (Node node : openNodes) {
 
-            g.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
+            g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
 
 
         }
@@ -240,7 +230,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             path.remove(pathFinderEndNode);
             path.remove(pathFinderStartNode);
             for (Node node : path) {
-                g.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
+                g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
             }
         }
 
@@ -250,6 +240,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 g.fillRect(block.getX() + 1, block.getY() + 1, gridDimention - 1, gridDimention - 1);
             }
         }
+
+
 
     }
 
@@ -278,7 +270,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 int ySub = e.getY() % gridDimention;
                 if (isEndOn % 2 == 1 && endNode == null) {
                     endNode = new Node(e.getX() - xSub, e.getY() - ySub);
-                    pathFinderEndNode =  new Node(endNode.getX() / 30 , endNode.getY() / 30 );
+                    pathFinderEndNode =  new Node(endNode.getX() / gridDimention , endNode.getY() / gridDimention );
                 }
                 else{
                     endNode = null;
@@ -291,7 +283,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
                 if (startNode == null) {
                     startNode = new Node(e.getX() - xSub, e.getY() - ySub);
-                    pathFinderStartNode = new Node(startNode.getX() / 30 , startNode.getY() / 30 );
+                    pathFinderStartNode = new Node(startNode.getX() / gridDimention , startNode.getY() / gridDimention );
                 }
 
                 repaint();
@@ -326,7 +318,22 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
+        if (keyRightNow == 'z') {
 
+            if (e.getWheelRotation() < 0) {
+
+
+                repaint();
+            } else if (e.getWheelRotation() > 0) {
+                //zoom out
+
+
+                repaint();
+
+            }
+
+
+        }
     }
 
     @Override
@@ -368,7 +375,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
             x.setColor(Color.MAGENTA);
             for (Node node : closedNodes) {
-                x.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
+                x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
             }
             try {
                 TimeUnit.MILLISECONDS.sleep(15);
@@ -382,7 +389,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             Graphics x = getGraphics();
             x.setColor(Color.green);
             for (Node node : openNodes) {
-                x.fillRect(node.getX() * 30 + 1, node.getY() * 30 + 1, gridDimention - 1, gridDimention - 1);
+                x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
 
 
             }
