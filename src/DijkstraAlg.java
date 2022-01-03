@@ -1,3 +1,4 @@
+import java.lang.reflect.Proxy;
 import java.util.*;
 
 public class DijkstraAlg extends Observable {
@@ -9,12 +10,14 @@ public class DijkstraAlg extends Observable {
     private static final double DEFAULT_DISTANCE = Double.MAX_VALUE;
     private Grid  grid;
     private boolean hasSolution;
-    private Set<Node> path;
+    private List<Node> path;
+    public static final String UNVISITED = "unvisited";
+    public static final String VISITED = "visited";
 
 
 
     public DijkstraAlg(Node start, Node endNode,  int row, int col) {
-        path = new LinkedHashSet<>();
+        path = new LinkedList<>();
         hasSolution = false;
         unsettled = new PriorityQueue<>();
         settled = new PriorityQueue<>();
@@ -40,6 +43,8 @@ public class DijkstraAlg extends Observable {
         while (!unsettled.isEmpty()) {
             Node curr = unsettled.poll();
             settled.add(curr);
+            setChanged();
+            notifyObservers(VISITED);
             if (curr.equals(endNode)) {
                 return curr;
             }
@@ -65,6 +70,8 @@ public class DijkstraAlg extends Observable {
                         neighbor.f = tempf;
                         neighbor.parent = curr;
                         unsettled.add(neighbor);
+                        setChanged();
+                        notifyObservers(UNVISITED);
                     }
 
 
@@ -81,7 +88,7 @@ public class DijkstraAlg extends Observable {
     }
 
 
-    public Set<Node> findPath(Node end) {
+    public List<Node> findPath(Node end) {
         if (!hasSolution) {
             hasSolution = false;
 
@@ -105,6 +112,15 @@ public class DijkstraAlg extends Observable {
             }
         }
         return ans;
+    }
+
+
+    public PriorityQueue<Node> getUnsettled() {
+        return unsettled;
+    }
+
+    public PriorityQueue<Node> getSettled() {
+        return settled;
     }
 
 
