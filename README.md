@@ -39,3 +39,13 @@
 
     e) push q on the closed list
     end (while loop)
+    
+    
+
+https://user-images.githubusercontent.com/32078486/147880654-a7a24e56-3346-4cf7-b32d-a8ce66951b40.mov
+
+
+   
+
+https://user-images.githubusercontent.com/32078486/147881396-04103699-0f04-47c7-be33-a21d78ca78ad.mov
+
