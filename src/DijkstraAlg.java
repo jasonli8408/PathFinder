@@ -3,7 +3,7 @@ import java.util.*;
 public class DijkstraAlg extends Observable {
     private PriorityQueue<Node> unsettled;
     private PriorityQueue<Node> settled;
-    private Node current;
+
     private Node start;
     private Node endNode;
     private static final double DEFAULT_DISTANCE = Double.MAX_VALUE;
@@ -14,13 +14,13 @@ public class DijkstraAlg extends Observable {
 
 
     public DijkstraAlg(Node start, Node endNode,  int row, int col) {
-        path = new HashSet<>();
+        path = new LinkedHashSet<>();
         hasSolution = false;
-        unsettled = new PriorityQueue<>(Comparator.comparingDouble(a -> a.g));
+        unsettled = new PriorityQueue<>();
         settled = new PriorityQueue<>();
         this.start = start;
-        start.g = 0;
-        current = start;
+        start.f = 0;
+
         grid = new Grid(row, col);
         this.endNode = endNode;
         unsettled.add(start);
@@ -29,44 +29,41 @@ public class DijkstraAlg extends Observable {
             for (int j = 0 ; j < grid.getRows() ; j++) {
                 Node node = grid.getNode(j, i);
                 if (node != start) {
-                    node.g = DEFAULT_DISTANCE;
+                    node.f = DEFAULT_DISTANCE;
                 }
             }
         }
     }
 
-    public void findEndNode() {
+    public Node findEndNode() {
 
         while (!unsettled.isEmpty()) {
             Node curr = unsettled.poll();
-
+            settled.add(curr);
+            if (curr.equals(endNode)) {
+                return curr;
+            }
 
 
             List<Node> children = findChildren(curr);
             for (Node neighbor : children) {
 
-                double tempG = Double.MAX_VALUE;
+                double tempf = Double.MAX_VALUE;
                 if (neighbor != null) {
 
-                    if (Math.abs(current.getX() - neighbor.getX()) == 1 && Math.abs(current.getY() - neighbor.getY()) == 1) {
-                        tempG = current.g + 1.4;
+                    if (Math.abs(curr.getX() - neighbor.getX()) == 1 && Math.abs(curr.getY() - neighbor.getY()) == 1) {
+                        tempf = curr.f + 1.4;
                     } else {
-                        tempG = current.g + 1;
+                        tempf = curr.f + 1;
                     }
 
                 }
 
-                if (tempG < neighbor.g) {
-                    if (settled.contains(neighbor)) {
-                        settled.remove(neighbor);
-                        neighbor.g = tempG;
+
+                    if (!settled.contains(neighbor)) {
+                        if (tempf < neighbor.f) {
+                        neighbor.f = tempf;
                         neighbor.parent = curr;
-                        settled.add(neighbor);
-                        unsettled.add(neighbor);
-                    } else {
-                        neighbor.g = tempG;
-                        neighbor.parent = curr;
-                        settled.add(neighbor);
                         unsettled.add(neighbor);
                     }
 
@@ -80,6 +77,7 @@ public class DijkstraAlg extends Observable {
 
 
         }
+        return null;
     }
 
 

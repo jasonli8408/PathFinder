@@ -78,7 +78,11 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         // Font size and style
         Font font = new Font("Verdana", Font.BOLD, 30);
 
-        JButton clearObstacles, clearEverything, chooseObstacles, findPath, incrementGridSize, decrementGridSize;
+        JButton clearObstacles, clearEverything, findPath;
+        JComboBox selectMode;
+        JLabel mode;
+
+
 
         class RoundedBorder implements Border {
             private final int radius;
@@ -99,6 +103,13 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
             }
         }
+
+        mode = new JLabel("mode: ");
+        mode.setHorizontalAlignment(JLabel.CENTER);
+        String[] modes = {"A star", "Dijkstra"};
+        selectMode = new JComboBox(modes);
+        selectMode.setSelectedIndex(1);
+
 
         clearObstacles = new JButton("Clear Obstacles");
         clearObstacles.setSize(new Dimension(10, 40));
@@ -174,10 +185,12 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
         JPanel p2 = new JPanel();
-        p2.setLayout(new GridLayout(3,1));
+        p2.setLayout(new GridLayout(5,1));
         p2.add(clearObstacles);
         p2.add(clearEverything);
         p2.add(findPath);
+        p2.add(mode);
+        p2.add(selectMode);
 
         frame.setLayout(new BorderLayout());
         frame.add(p2,BorderLayout.LINE_END);

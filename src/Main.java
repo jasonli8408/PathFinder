@@ -5,15 +5,15 @@ public class Main {
 
     public static void main(String[] args) {
         Node startNode = new Node(2,5);
-        Node endNode = new Node(8,7);
+        Node endNode = new Node(7,7);
         DijkstraAlg d = new DijkstraAlg(startNode, endNode, 10,10);
 
 
-         d.findEndNode();
-         Set<Node> path = d.findPath(d.getEndNode());
-         for (Node next : path) {
-             System.out.println(next);
-         }
+//        Node endNode1 = d.findEndNode();
+//        Set<Node> path = d.findPath(endNode1);
+//         for (Node next : path) {
+//             System.out.println(next);
+//         }
 
 
 
@@ -23,7 +23,7 @@ public class Main {
 //        for (Node next : path2) {
 //            System.out.println(next);
 //        }
-//        new GUI();
+        new GUI();
 
 
     }
