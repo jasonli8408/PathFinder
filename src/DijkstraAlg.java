@@ -43,7 +43,7 @@ public class DijkstraAlg extends Observable {
         while (!unsettled.isEmpty()) {
             Node curr = unsettled.poll();
             settled.add(curr);
-            setChanged();
+            setChanged(); 
             notifyObservers(VISITED);
             if (curr.equals(endNode)) {
                 return curr;
