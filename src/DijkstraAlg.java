@@ -194,4 +194,7 @@ public class DijkstraAlg extends Observable {
     }
 
 
+    public Grid getGrid() {
+        return grid;
+    }
 }

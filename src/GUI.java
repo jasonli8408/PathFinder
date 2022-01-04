@@ -205,7 +205,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
                             Node dijBlock = new Node(block.getX() / gridDimention == 90 ? 89 : block.getX() / gridDimention, block.getY() / gridDimention == 90 ? 89 : block.getY() / gridDimention
                             );
-                            pathFinder.getGrid().flipNode(dijBlock.getX(), dijBlock.getY());
+                            dijkstraAlg.getGrid().flipNode(dijBlock.getX(), dijBlock.getY());
                         }
 
 
