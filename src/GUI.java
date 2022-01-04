@@ -17,8 +17,10 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private JFrame window;
     private PathFinder pathFinder;
     private DijkstraAlg dijkstraAlg;
+    private BreadthFirst BFS;
     private PriorityQueue<Node> unvisited;
     private PriorityQueue<Node> visited;
+    private PriorityQueue<Node> BFSvisited;
     private final static int gridDimention = 10;
     private Character keyRightNow;
     private Node GUIstartNode;
@@ -43,6 +45,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     public GUI() {
         unvisited = new PriorityQueue<>();
         visited = new PriorityQueue<>();
+        BFSvisited = new PriorityQueue<>();
         path = null;
         closedNodes = new PriorityQueue<>();
         openNodes = new PriorityQueue<>();
@@ -109,11 +112,12 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
         mode = new JLabel("mode: ");
         mode.setHorizontalAlignment(JLabel.CENTER);
-        String[] modes = {"A star", "Dijkstra"};
+        String[] modes = {"A star", "Dijkstra", "Breadth-First Search"};
         selectMode = new JComboBox<>();
         selectMode.addItem(modes[0]);
         selectMode.addItem(modes[1]);
-        selectMode.setSelectedIndex(1);
+        selectMode.addItem(modes[2]);
+        selectMode.setSelectedIndex(0);
 
 
         clearObstacles = new JButton("Clear Obstacles");
@@ -162,7 +166,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             }
         });
 
-        findPath = new JButton("A* Find Path");
+        findPath = new JButton("Run");
         findPath.setSize(new Dimension(10, 40));
         findPath.setBorder(new RoundedBorder(10));
         findPath.addActionListener(new ActionListener() {
@@ -172,47 +176,45 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
                 String selection = (String) selectMode.getSelectedItem();
                 if (selection.equals("A star")) {
-
-
                     if (pathFinderEndNode != null && pathFinderStartNode != null) {
                         pathFinder = new PathFinder(pathFinderStartNode, pathFinderEndNode, 900 / gridDimention, 900 / gridDimention);
                         pathFinder.addObserver(GUI.this);
                         for (Node block : blocks) {
-
-
                             Node pathfindingBlock = new Node(block.getX() / gridDimention == 90 ? 89 : block.getX() / gridDimention, block.getY() / gridDimention == 90 ? 89 : block.getY() / gridDimention
                             );
                             pathFinder.getGrid().flipNode(pathfindingBlock.getX(), pathfindingBlock.getY());
                         }
                         path = pathFinder.findPath(pathFinder.aStar());
-
-
-                        //
                         if (!pathFinder.hasSolution) {
                             JOptionPane.showMessageDialog(null, "there is no path to the end point");
                         }
-
-
                         repaint();
                     }
                 } else if (selection.equals("Dijkstra")) {
                     if (pathFinderEndNode != null && pathFinderStartNode != null) {
                         dijkstraAlg = new DijkstraAlg(pathFinderStartNode, pathFinderEndNode, 900 / gridDimention, 900 / gridDimention);
                         dijkstraAlg.addObserver(GUI.this);
-
                         for (Node block : blocks) {
-
-
                             Node dijBlock = new Node(block.getX() / gridDimention == 90 ? 89 : block.getX() / gridDimention, block.getY() / gridDimention == 90 ? 89 : block.getY() / gridDimention
                             );
                             dijkstraAlg.getGrid().flipNode(dijBlock.getX(), dijBlock.getY());
                         }
-
-
                         path = dijkstraAlg.findPath(dijkstraAlg.findEndNode());
-
                         repaint();
+                    }
 
+                }
+                else if(selection.equals("Breadth-First Search")){
+                    if (pathFinderEndNode != null && pathFinderStartNode != null) {
+                        BFS = new BreadthFirst(pathFinderStartNode, pathFinderEndNode, 900 / gridDimention, 900 / gridDimention);
+                        BFS.addObserver(GUI.this);
+                        for (Node block : blocks) {
+                            Node BFSblock = new Node(block.getX() / gridDimention == 90 ? 89 : block.getX() / gridDimention, block.getY() / gridDimention == 90 ? 89 : block.getY() / gridDimention
+                            );
+                            dijkstraAlg.getGrid().flipNode(BFSblock.getX(), BFSblock.getY());
+                        }
+                        path = BFS.findPath(BFS.BFS());
+                        repaint();
                     }
 
                 }
@@ -258,11 +260,14 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
         g.setColor(Color.green);
         for (Node node : visited) {
-
             g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
-
-
         }
+
+        g.setColor(Color.green);
+        for (Node node : BFSvisited) {
+            g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
+        }
+
 
         g.setColor(Color.lightGray);
         for (int y = 0; y < this.getHeight(); y += gridDimention) { //cp
@@ -280,7 +285,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             g.setColor(Color.blue);
             g.fillRect(GUIstartNode.getX() + 1, GUIstartNode.getY() + 1, gridDimention - 1, gridDimention - 1);
         }
-
 
 
         if (path != null) {
@@ -322,40 +326,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     @Override
     public void mouseClicked(MouseEvent e) {
         String selection = (String) selectMode.getSelectedItem();
-
-        if (selection.equals("A star")) {
-
-        if (SwingUtilities.isLeftMouseButton(e)) {
-            if (keyRightNow == 'e' || keyRightNow == 'E') {
-                isEndOn++;
-                int xSub = e.getX() % gridDimention;
-                int ySub = e.getY() % gridDimention;
-                if (isEndOn % 2 == 1 && GUIendNode == null) {
-                    GUIendNode = new Node(e.getX() - xSub, e.getY() - ySub);
-                    pathFinderEndNode = new Node(GUIendNode.getX() / gridDimention, GUIendNode.getY() / gridDimention);
-                } else {
-                    GUIendNode = null;
-                }
-                repaint();
-
-            } else if (keyRightNow == 's' || keyRightNow == 'S') {
-                int xSub = e.getX() % gridDimention;
-                int ySub = e.getY() % gridDimention;
-
-                if (GUIstartNode == null) {
-                    GUIstartNode = new Node(e.getX() - xSub, e.getY() - ySub);
-                    pathFinderStartNode = new Node(GUIstartNode.getX() / gridDimention, GUIstartNode.getY() / gridDimention);
-                }
-
-                repaint();
-            }
-        }
-
-
-
-
-
-        } else {
             if (SwingUtilities.isLeftMouseButton(e)) {
                 if (keyRightNow == 'e' || keyRightNow == 'E') {
                     isEndOn++;
@@ -368,21 +338,19 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                         GUIendNode = null;
                     }
                     repaint();
-
                 } else if (keyRightNow == 's' || keyRightNow == 'S') {
                     int xSub = e.getX() % gridDimention;
                     int ySub = e.getY() % gridDimention;
-
-                    if (GUIstartNode == null) {
+                    isStartOn++;
+                    if (isStartOn % 2 == 1 && GUIstartNode == null) {
                         GUIstartNode = new Node(e.getX() - xSub, e.getY() - ySub);
                         pathFinderStartNode = new Node(GUIstartNode.getX() / gridDimention, GUIstartNode.getY() / gridDimention);
+                    } else {
+                        GUIstartNode = null;
                     }
-
                     repaint();
                 }
             }
-
-        }
     }
 
     @Override
@@ -492,12 +460,9 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                     e.printStackTrace();
                 }
             }
-        } else {
-
+        } else if(selection.equals("Dijkstra")){
             String operation = (String) arg;
             DijkstraAlg d = (DijkstraAlg) o;
-
-
             if (operation.equals(d.UNVISITED)) {
                 PriorityQueue<Node> unvisited = d.getUnsettled();
                 this.unvisited = unvisited;
