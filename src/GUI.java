@@ -131,6 +131,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 blocks = new HashSet<>();
                 closedNodes = new PriorityQueue<>();
                 openNodes = new PriorityQueue<>();
+                visited = new PriorityQueue<>();
+                unvisited = new PriorityQueue<>();
                 path = null;
                 repaint();
 
@@ -156,6 +158,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 path = null;
                 closedNodes = new PriorityQueue<>();
                 openNodes = new PriorityQueue<>();
+                visited = new PriorityQueue<>();
+                unvisited = new PriorityQueue<>();
                 repaint();
 
                 JOptionPane.showMessageDialog(null, "Everything is cleared!");
@@ -479,7 +483,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                     x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
                 }
                 try {
-                    TimeUnit.MILLISECONDS.sleep(15);
+                    TimeUnit.MILLISECONDS.sleep(2);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -495,7 +499,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
                 }
                 try {
-                    TimeUnit.MILLISECONDS.sleep(15);
+                    TimeUnit.MILLISECONDS.sleep(2);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -518,7 +522,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                     x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
                 }
                 try {
-                    TimeUnit.MILLISECONDS.sleep(15);
+                    TimeUnit.MILLISECONDS.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -534,7 +538,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
                 }
                 try {
-                    TimeUnit.MILLISECONDS.sleep(15);
+                    TimeUnit.MILLISECONDS.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
