@@ -53,32 +53,33 @@ public class DijkstraAlg extends Observable {
             List<Node> children = findChildren(curr);
             for (Node neighbor : children) {
 
-                double tempf = Double.MAX_VALUE;
                 if (neighbor != null) {
+                    double tempf = Double.MAX_VALUE;
+                    if (neighbor != null) {
 
-                    if (Math.abs(curr.getX() - neighbor.getX()) == 1 && Math.abs(curr.getY() - neighbor.getY()) == 1) {
-                        tempf = curr.f + 1.4;
-                    } else {
-                        tempf = curr.f + 1;
+                        if (Math.abs(curr.getX() - neighbor.getX()) == 1 && Math.abs(curr.getY() - neighbor.getY()) == 1) {
+                            tempf = curr.f + 1.4;
+                        } else {
+                            tempf = curr.f + 1;
+                        }
+
                     }
-
-                }
 
 
                     if (!settled.contains(neighbor)) {
                         if (tempf < neighbor.f) {
-                        neighbor.f = tempf;
-                        neighbor.parent = curr;
-                        unsettled.add(neighbor);
-                        setChanged();
-                        notifyObservers(UNVISITED);
+                            neighbor.f = tempf;
+                            neighbor.parent = curr;
+                            unsettled.add(neighbor);
+                            setChanged();
+                            notifyObservers(UNVISITED);
+                        }
+
+
                     }
 
 
-                    
                 }
-
-
             }
 
 
