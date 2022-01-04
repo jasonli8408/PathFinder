@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 
+//implements: are the tools were using to get input from the user from front end GUI
 public class GUI extends JPanel implements MouseWheelListener, MouseListener, KeyListener, ActionListener, MouseMotionListener, Observer{
 
     private JFrame window;
@@ -63,7 +64,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         window = new JFrame();
         window.setContentPane(this);
         window.getContentPane().setPreferredSize(new Dimension(900,900));
-
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //how it would close
         window.setTitle("A* algorithm");
         window.pack();
@@ -245,26 +245,18 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-
-
         g.setColor(Color.MAGENTA);
         for (Node node : closedNodes) {
-
             g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
         }
 
         g.setColor(Color.green);
         for (Node node : openNodes) {
-
             g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
-
-
         }
-
 
         g.setColor(Color.MAGENTA);
         for (Node node : unvisited) {
-
             g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
         }
 
@@ -513,10 +505,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             if (operation.equals(d.UNVISITED)) {
                 PriorityQueue<Node> unvisited = d.getUnsettled();
                 this.unvisited = unvisited;
-
                 this.unvisited.remove(DijStartNode);
                 Graphics x = getGraphics();
-
                 x.setColor(Color.MAGENTA);
                 for (Node node : this.unvisited) {
                     x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
@@ -534,7 +524,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 x.setColor(Color.green);
                 for (Node node : visited) {
                     x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
-
 
                 }
                 try {

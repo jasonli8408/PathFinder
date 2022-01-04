@@ -23,11 +23,9 @@ public class DijkstraAlg extends Observable {
         settled = new PriorityQueue<>();
         this.start = start;
         start.f = 0;
-
         grid = new Grid(row, col);
         this.endNode = endNode;
         unsettled.add(start);
-
         for (int i = 0 ; i < grid.getCols() ; i++) {
             for (int j = 0 ; j < grid.getRows() ; j++) {
                 Node node = grid.getNode(j, i);
@@ -39,7 +37,6 @@ public class DijkstraAlg extends Observable {
     }
 
     public Node findEndNode() {
-
         while (!unsettled.isEmpty()) {
             Node curr = unsettled.poll();
             settled.add(curr);
@@ -48,24 +45,17 @@ public class DijkstraAlg extends Observable {
             if (curr.equals(endNode)) {
                 return curr;
             }
-
-
             List<Node> children = findChildren(curr);
             for (Node neighbor : children) {
-
                 if (neighbor != null) {
                     double tempf = Double.MAX_VALUE;
                     if (neighbor != null) {
-
                         if (Math.abs(curr.getX() - neighbor.getX()) == 1 && Math.abs(curr.getY() - neighbor.getY()) == 1) {
                             tempf = curr.f + 1.4;
                         } else {
                             tempf = curr.f + 1;
                         }
-
                     }
-
-
                     if (!settled.contains(neighbor)) {
                         if (tempf < neighbor.f) {
                             neighbor.f = tempf;
