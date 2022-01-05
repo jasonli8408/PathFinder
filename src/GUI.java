@@ -211,7 +211,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                         for (Node block : blocks) {
                             Node BFSblock = new Node(block.getX() / gridDimention == 90 ? 89 : block.getX() / gridDimention, block.getY() / gridDimention == 90 ? 89 : block.getY() / gridDimention
                             );
-                            dijkstraAlg.getGrid().flipNode(BFSblock.getX(), BFSblock.getY());
+                            BFS.getGrid().flipNode(BFSblock.getX(), BFSblock.getY());
                         }
                         path = BFS.findPath(BFS.BFS());
                         repaint();
@@ -408,7 +408,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             if (keyRightNow == 'b') {
                 Node block = new Node(e.getX() - xSub, e.getY() - ySub);
                 blocks.add(block);
-
             }
             repaint();
         }
@@ -494,5 +493,27 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 }
             }
         }
+        else if(selection.equals("Breadth-First Search")){
+            String operation = (String) arg;
+            BreadthFirst d = (BreadthFirst) o;
+            if(operation.equals("v")){
+                PriorityQueue<Node> visit = d.getBFSvisited();
+                visit.remove(pathFinderStartNode);
+                Graphics x = getGraphics();
+                x.setColor(Color.green);
+                for (Node node : visit) {
+                    x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
+                }
+                try {
+                    TimeUnit.MILLISECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
+        }
+
     }
 }

@@ -4,13 +4,13 @@ import java.util.Set;
 public class Main {
 
     public static void main(String[] args) {
-        Node startNode = new Node(2,5);
-        Node endNode = new Node(7,7);
-        DijkstraAlg d = new DijkstraAlg(startNode, endNode, 10,10);
-
-
-//        Node endNode1 = d.findEndNode();
-//        Set<Node> path = d.findPath(endNode1);
+//        Node startNode = new Node(2,5);
+//        Node endNode = new Node(7,7);
+//        BreadthFirst d = new BreadthFirst(startNode, endNode, 10,10);
+//
+//
+//        Node endNode1 = d.BFS();
+//        List<Node> path = d.findPath(endNode1);
 //         for (Node next : path) {
 //             System.out.println(next);
 //         }

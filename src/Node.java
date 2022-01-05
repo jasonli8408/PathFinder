@@ -17,11 +17,13 @@ public class Node implements Comparable<Node>{
     private final int x; //for the coordinate: there are two different unit
     // x = 1 in PathFinder, Node, Grid -> equals to x = 30 in GUI since the length and width of each block is 30 but in pathfinder its assumes none
     private final int y;
+    Boolean isVisited;
 
     public Node(int x1, int y1) {
         //values that are constant
         x = x1;
         y = y1;
+        isVisited = false;
 
         //values that are going to get calculated
         h = 0; //0 means we haven't calculated the value since h, f,g are not constant

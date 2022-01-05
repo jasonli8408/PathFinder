@@ -3,7 +3,7 @@ import java.util.*;
 public class BreadthFirst extends Observable {
     //we use the priority queue data structure since in java its build upon min heap, and we could find the node with the
     //smallest f(x) value faster
-    private final PriorityQueue<Node> BFSvisited; //nodes that are the options to go through
+    private PriorityQueue<Node> BFSvisited; //nodes that are the options to go through
     private final Node startNode;
     private final Node endNode;
     //grid used to represent the structure of graph-like connecting the nodes together
@@ -31,7 +31,8 @@ public class BreadthFirst extends Observable {
 
     public Node BFS() {
         while (!BFSvisited.isEmpty()) { //while the open list is not empty, and we have options to step on
-            Node current  = BFSvisited.poll(); //we get the smallest f valued node, best option
+            Node current  = BFSvisited.poll();
+            current.isVisited = true;
             setChanged();
             notifyObservers("v");
             if (current.equals(endNode)) { //it already found the solution
@@ -41,7 +42,7 @@ public class BreadthFirst extends Observable {
 
             List<Node> children = findChildren(current);
             for (Node child : children) {
-                if (child != null && !BFSvisited.contains(child)) {
+                if (child != null && !child.isVisited) {
                     child.parent = current;
                     BFSvisited.add(child);
                 }
@@ -60,6 +61,10 @@ public class BreadthFirst extends Observable {
         Node parent = end.parent;
         findPath(parent);
         return path;
+    }
+
+    public PriorityQueue<Node> getBFSvisited() {
+        return BFSvisited;
     }
 
     public List<Node> findChildren(Node node) {
@@ -119,6 +124,10 @@ public class BreadthFirst extends Observable {
             children.add(addChildren(x, cols - 2));
             children.add(addChildren(x - 1, cols - 2));
         }
+        else if (node.getY() == cols - 1 && node.getX() == rows - 1) {
+            children.add(null);
+        }
+
         return children;
     }
 
