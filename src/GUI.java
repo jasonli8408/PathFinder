@@ -1,13 +1,9 @@
-import javafx.scene.control.SelectionMode;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.AffineTransform;
 import java.util.*;
 import java.util.List;
-import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 
@@ -17,7 +13,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private JFrame window;
     private PathFinder pathFinder;
     private DijkstraAlg dijkstraAlg;
-    private BreadthFirst BFS;
+    private ByTheHolistic BFS;
     private PriorityQueue<Node> unvisited;
     private PriorityQueue<Node> visited;
     private PriorityQueue<Node> BFSvisited;
@@ -114,7 +110,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
         mode = new JLabel("mode: ");
         mode.setHorizontalAlignment(JLabel.CENTER);
-        String[] modes = {"A star", "Dijkstra", "Breadth-First Search"};
+        String[] modes = {"A star", "Dijkstra", "By Holistic value"};
         selectMode = new JComboBox<>();
         selectMode.addItem(modes[0]);
         selectMode.addItem(modes[1]);
@@ -155,13 +151,18 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 GUIstartNode = null;
                 pathFinderStartNode = null;
                 pathFinderEndNode = null;
-                isEndOn ++;
-                isStartOn ++;
+                BFSvisited = null;
+                BFSunvisited = null;
+                isEndOn = 0;
+                isStartOn = 0;
                 path = null;
                 closedNodes = new PriorityQueue<>();
                 openNodes = new PriorityQueue<>();
                 visited = new PriorityQueue<>();
                 unvisited = new PriorityQueue<>();
+
+                BFSvisited = new PriorityQueue<>();
+                BFSunvisited = new PriorityQueue<>();
                 repaint();
 
                 JOptionPane.showMessageDialog(null, "Everything is cleared!");
@@ -207,9 +208,9 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                     }
 
                 }
-                else if(selection.equals("Breadth-First Search")){
+                else if(selection.equals("By Holistic value")){
                     if (pathFinderEndNode != null && pathFinderStartNode != null) {
-                        BFS = new BreadthFirst(pathFinderStartNode, pathFinderEndNode, 900 / gridDimention, 900 / gridDimention);
+                        BFS = new ByTheHolistic(pathFinderStartNode, pathFinderEndNode, 900 / gridDimention, 900 / gridDimention);
                         BFS.addObserver(GUI.this);
                         for (Node block : blocks) {
                             Node BFSblock = new Node(block.getX() / gridDimention == 90 ? 89 : block.getX() / gridDimention, block.getY() / gridDimention == 90 ? 89 : block.getY() / gridDimention
@@ -299,7 +300,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
         if (path != null) {
-            g.setColor(Color.BLUE);
+            g.setColor(Color.pink);
             path.remove(pathFinderEndNode);
             path.remove(pathFinderStartNode);
             for (Node node : path) {
@@ -504,9 +505,9 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 }
             }
         }
-        else if(selection.equals("Breadth-First Search")){
+        else if(selection.equals("By Holistic value")){
             String operation = (String) arg;
-            BreadthFirst d = (BreadthFirst) o;
+            ByTheHolistic d = (ByTheHolistic) o;
             if(operation.equals("v")){
                 PriorityQueue<Node> visit = d.getBFSvisited();
                 visit.remove(pathFinderStartNode);
@@ -528,7 +529,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 this.BFSunvisited = d.getBFSunvisited();
                 unvisit.remove(pathFinderStartNode);
                 Graphics x = getGraphics();
-                x.setColor(Color.yellow);
+                x.setColor(Color.magenta);
                 for (Node node : unvisit) {
                     x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
                 }

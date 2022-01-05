@@ -1,9 +1,8 @@
 import java.util.*;
 
-public class BreadthFirst extends Observable {
+public class ByTheHolistic extends Observable {
     private PriorityQueue<Node> unsettled;
     private PriorityQueue<Node> settled;
-
     private Node start;
     private Node endNode;
     private static final double DEFAULT_DISTANCE = Double.MAX_VALUE;
@@ -15,7 +14,7 @@ public class BreadthFirst extends Observable {
 
 
 
-    public BreadthFirst(Node start, Node endNode,  int row, int col) {
+    public ByTheHolistic(Node start, Node endNode, int row, int col) {
         path = new LinkedList<>();
         hasSolution = false;
         unsettled = new PriorityQueue<>();
