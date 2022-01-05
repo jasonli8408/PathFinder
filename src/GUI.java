@@ -145,7 +145,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         makeMaze.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Set<Node> blocks2 = mazeGenerator.makeMaze(0,0,90,90);
+
+                Set<Node> blocks2 = mazeGenerator.makeMaze(0,0,900 / gridDimention,900 / gridDimention);
 
                 for (Node block : blocks2) {
 

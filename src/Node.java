@@ -17,11 +17,13 @@ public class Node implements Comparable<Node>{
     private Boolean isNode; //after the input we understand if the node can be used or not (might be an obstacle)
     private final int x; //for the coordinate
     private final int y;
+    private boolean isDoor;
 
 
     public Node(int x1, int y1) {
 
         //values that are constant
+        isDoor = false;
         x = x1;
         y = y1;
         //values that are going to get calculated
@@ -119,5 +121,13 @@ public class Node implements Comparable<Node>{
     @Override
     public String toString() {
         return "(" + x + ", " + y + ")";
+    }
+
+    public void makeDoor() {
+        isDoor = true;
+    }
+
+    public boolean isDoor() {
+        return isDoor;
     }
 }
