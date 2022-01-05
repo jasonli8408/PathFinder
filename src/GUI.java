@@ -288,7 +288,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
         if (path != null) {
-            g.setColor(Color.pink);
+            g.setColor(Color.BLUE);
             path.remove(pathFinderEndNode);
             path.remove(pathFinderStartNode);
             for (Node node : path) {

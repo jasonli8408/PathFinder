@@ -47,6 +47,9 @@ public class DijkstraAlg extends Observable {
             }
             List<Node> children = findChildren(curr);
             for (Node neighbor : children) {
+                if (neighbor.equals(endNode)) {
+                    return curr;
+                }
                 if (neighbor != null) {
                     double tempf;
 
