@@ -1,26 +1,23 @@
-import java.lang.reflect.Proxy;
 import java.util.*;
 
-public class DijkstraAlg extends Observable {
-    private PriorityQueue<Node> unsettled;
-    private PriorityQueue<Node> settled;
-
+public class bfs extends Observable {
+    private Queue<Node> unsettled;
+    //    private PriorityQueue<Node> settled;
     private Node start;
     private Node endNode;
     private static final double DEFAULT_DISTANCE = Double.MAX_VALUE;
     private Grid  grid;
-    public boolean hasSolution;
+    private boolean hasSolution;
     private List<Node> path;
-    public static final String UNVISITED = "unvisited";
-    public static final String VISITED = "visited";
 
 
 
-    public DijkstraAlg(Node start, Node endNode,  int row, int col) {
+
+    public bfs(Node start, Node endNode, int row, int col) {
         path = new LinkedList<>();
         hasSolution = false;
         unsettled = new PriorityQueue<>();
-        settled = new PriorityQueue<>();
+//        settled = new PriorityQueue<>();
         this.start = start;
         start.f = 0;
         grid = new Grid(row, col);
@@ -36,46 +33,31 @@ public class DijkstraAlg extends Observable {
         }
     }
 
-    public Node findEndNode() {
+    public Node BFS() {
+        int i = 0;
         while (!unsettled.isEmpty()) {
             Node curr = unsettled.poll();
-            settled.add(curr);
-            setChanged(); 
-            notifyObservers(VISITED);
-            if (curr.equals(endNode)) {
+//            settled.add(curr);
+            setChanged();
+            notifyObservers("v");
+            if (curr.getY() == endNode.getY() && curr.getX() == endNode.getX()) {
                 hasSolution = true;
                 return curr;
             }
             List<Node> children = findChildren(curr);
             for (Node neighbor : children) {
                 if (neighbor != null) {
-                    double tempf;
-
-                    if (Math.abs(curr.getX() - neighbor.getX()) == 1 && Math.abs(curr.getY() - neighbor.getY()) == 1) {
-                        tempf = curr.f + 1.4;
+                    i++;
+//                    if (!settled.contains(neighbor)) {
+                    if (neighbor.f == DEFAULT_DISTANCE) {
+                        neighbor.f = i;
+                        neighbor.parent = curr;
+                        unsettled.add(neighbor);
+                        setChanged();
+                        notifyObservers("uv");
                     }
-                    else {
-                        tempf = curr.f + 1;
-                    }
-
-                    if (!settled.contains(neighbor)) {
-                        if (tempf < neighbor.f) {
-                            neighbor.f = tempf;
-                            neighbor.parent = curr;
-                            unsettled.add(neighbor);
-                            setChanged();
-                            notifyObservers(UNVISITED);
-                        }
-
-
-                    }
-
-
                 }
             }
-
-
-
         }
         hasSolution = false;
         return null;
@@ -94,23 +76,23 @@ public class DijkstraAlg extends Observable {
     }
 
 
-    public Node getEndNode() {
-        Node ans = null;
-        for (Node node : settled) {
-            if (node.equals(endNode)) {
-                ans =  node;
-            }
-        }
-        return ans;
-    }
+//    public Node getEndNode() {
+//        Node ans = null;
+//        for (Node node : settled) {
+//            if (node.equals(endNode)) {
+//                ans =  node;
+//            }
+//        }
+//        return ans;
+//    }
 
 
-    public PriorityQueue<Node> getUnsettled() {
+
+    //    public PriorityQueue<Node> getBFSvisited() {
+//        return settled;
+//    }
+    public Queue<Node> getBFSunvisited() {
         return unsettled;
-    }
-
-    public PriorityQueue<Node> getSettled() {
-        return settled;
     }
 
 
@@ -122,54 +104,54 @@ public class DijkstraAlg extends Observable {
         int y = node.getY();
 
         if (1 <= node.getX() && node.getX() <= rows - 2 && 1 <= node.getY() && node.getY() <= cols - 2) {
-            children.add(addChildren(x - 1, y - 1));
+//            children.add(addChildren(x - 1, y - 1));
             children.add(addChildren(x - 1, y));
-            children.add(addChildren(x - 1, y + 1));
+//            children.add(addChildren(x - 1, y + 1));
             children.add(addChildren(x, y - 1));
             children.add(addChildren(x, y + 1));
-            children.add(addChildren(x + 1, y - 1));
+//            children.add(addChildren(x + 1, y - 1));
             children.add(addChildren(x + 1, y));
-            children.add(addChildren(x + 1, y + 1));
+//            children.add(addChildren(x + 1, y + 1));
         } else if (node.getX() == 0 && node.getY() == 0) {
             children.add(addChildren(0, 1));
-            children.add(addChildren(1, 1));
+//            children.add(addChildren(1, 1));
             children.add(addChildren(1, 0));
         } else if (node.getX() == 0 && node.getY() == cols - 1) {
             children.add(addChildren(0, cols - 2));
-            children.add(addChildren(1, cols - 2));
+//            children.add(addChildren(1, cols - 2));
             children.add(addChildren(1, cols - 1));
         } else if (node.getX() == rows - 1 && node.getY() == 0) {
             children.add(addChildren(rows - 2, 0));
-            children.add(addChildren(rows - 2, 1));
+//            children.add(addChildren(rows - 2, 1));
             children.add(addChildren(rows - 1, 1));
         } else if (node.getX() == rows - 1 && node.getY() == cols - 1) {
             children.add(addChildren(rows - 2, cols - 1));
-            children.add(addChildren(rows - 2, cols - 2));
+//            children.add(addChildren(rows - 2, cols - 2));
             children.add(addChildren(rows - 1, cols - 2));
         } else if (node.getX() == 0) {
             children.add(addChildren(0, y - 1));
             children.add(addChildren(0, y + 1));
-            children.add(addChildren(1, y - 1));
+//            children.add(addChildren(1, y - 1));
             children.add(addChildren(1, y));
-            children.add(addChildren(1, y + 1));
+//            children.add(addChildren(1, y + 1));
         } else if (node.getX() == rows - 1) {
             children.add(addChildren(rows - 1, y - 1));
             children.add(addChildren(rows - 1, y + 1));
-            children.add(addChildren(rows - 2, y - 1));
+//            children.add(addChildren(rows - 2, y - 1));
             children.add(addChildren(rows - 2, y));
-            children.add(addChildren(rows - 2, y - 1));
+//            children.add(addChildren(rows - 2, y - 1));
         } else if (node.getY() == 0) {
             children.add(addChildren(x - 1, 0));
             children.add(addChildren(x + 1, 0));
-            children.add(addChildren(x - 1, 1));
+//            children.add(addChildren(x - 1, 1));
             children.add(addChildren(x, 1));
-            children.add(addChildren(x + 1, 1));
+//            children.add(addChildren(x + 1, 1));
         } else if (node.getY() == cols - 1) {
             children.add(addChildren(x - 1, cols - 1));
             children.add(addChildren(x + 1, cols - 1));
-            children.add(addChildren(x - 1, cols - 2));
+//            children.add(addChildren(x - 1, cols - 2));
             children.add(addChildren(x, cols - 2));
-            children.add(addChildren(x - 1, cols - 2));
+//            children.add(addChildren(x - 1, cols - 2));
         }
 
         return children;

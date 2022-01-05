@@ -7,7 +7,7 @@ public class ByTheHolistic extends Observable {
     private Node endNode;
     private static final double DEFAULT_DISTANCE = Double.MAX_VALUE;
     private Grid  grid;
-    private boolean hasSolution;
+    public boolean hasSolution;
     private List<Node> path;
     public static final String UNVISITED = "unvisited";
     public static final String VISITED = "visited";
@@ -34,7 +34,7 @@ public class ByTheHolistic extends Observable {
         }
     }
 
-    public Node BFS() {
+    public Node holistic() {
         while (!unsettled.isEmpty()) {
             Node curr = unsettled.poll();
             settled.add(curr);
@@ -61,15 +61,12 @@ public class ByTheHolistic extends Observable {
                 }
             }
         }
+        hasSolution = false;
         return null;
     }
 
 
     public List<Node> findPath(Node end) {
-        if (!hasSolution) {
-            hasSolution = false;
-
-        }
         //since each node only has ONE parent, we can simply traverse back to the starting point
         if (end == null) {
             return path;
@@ -93,10 +90,10 @@ public class ByTheHolistic extends Observable {
 
 
 
-    public PriorityQueue<Node> getBFSvisited() {
+    public PriorityQueue<Node> getHvisited() {
         return settled;
     }
-    public PriorityQueue<Node> getBFSunvisited() {
+    public PriorityQueue<Node> getHunvisited() {
         return unsettled;
     }
 

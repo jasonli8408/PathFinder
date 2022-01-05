@@ -13,11 +13,15 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private JFrame window;
     private PathFinder pathFinder;
     private DijkstraAlg dijkstraAlg;
-    private ByTheHolistic BFS;
+    private ByTheHolistic h;
+    private bfs bfs;
     private PriorityQueue<Node> unvisited;
     private PriorityQueue<Node> visited;
-    private PriorityQueue<Node> BFSvisited;
-    private PriorityQueue<Node> BFSunvisited;
+    private PriorityQueue<Node> Hvisited;
+    private PriorityQueue<Node> Hunvisited;
+    private PriorityQueue<Node> closedNodes;
+    private PriorityQueue<Node> openNodes;
+
     private final static int gridDimention = 10;
     private Character keyRightNow;
     private Node GUIstartNode;
@@ -28,8 +32,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private Node pathFinderEndNode;
     private List<Node> path;
     private Set<Node> blocks;
-    private PriorityQueue<Node> closedNodes;
-    private PriorityQueue<Node> openNodes;
+
 
     private static final int INCREMENT_SIZE = 300;
     private JComboBox selectMode;
@@ -42,8 +45,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     public GUI() {
         unvisited = new PriorityQueue<>();
         visited = new PriorityQueue<>();
-        BFSvisited = new PriorityQueue<>();
-        BFSunvisited = new PriorityQueue<>();
+        Hvisited = new PriorityQueue<>();
+        Hunvisited = new PriorityQueue<>();
         path = null;
         closedNodes = new PriorityQueue<>();
         openNodes = new PriorityQueue<>();
@@ -110,11 +113,12 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
         mode = new JLabel("mode: ");
         mode.setHorizontalAlignment(JLabel.CENTER);
-        String[] modes = {"A star", "Dijkstra", "By Holistic value"};
+        String[] modes = {"A star", "Dijkstra", "By Holistic value", "BFS"};
         selectMode = new JComboBox<>();
         selectMode.addItem(modes[0]);
         selectMode.addItem(modes[1]);
         selectMode.addItem(modes[2]);
+        selectMode.addItem(modes[3]);
         selectMode.setSelectedIndex(0);
 
 
@@ -151,8 +155,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 GUIstartNode = null;
                 pathFinderStartNode = null;
                 pathFinderEndNode = null;
-                BFSvisited = null;
-                BFSunvisited = null;
+                Hvisited = null;
+                Hunvisited = null;
                 isEndOn = 0;
                 isStartOn = 0;
                 path = null;
@@ -160,9 +164,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 openNodes = new PriorityQueue<>();
                 visited = new PriorityQueue<>();
                 unvisited = new PriorityQueue<>();
-
-                BFSvisited = new PriorityQueue<>();
-                BFSunvisited = new PriorityQueue<>();
+                Hvisited = new PriorityQueue<>();
+                Hunvisited = new PriorityQueue<>();
                 repaint();
 
                 JOptionPane.showMessageDialog(null, "Everything is cleared!");
@@ -176,7 +179,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 String selection = (String) selectMode.getSelectedItem();
                 if (selection.equals("A star")) {
                     if (pathFinderEndNode != null && pathFinderStartNode != null) {
@@ -203,26 +205,31 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                             dijkstraAlg.getGrid().flipNode(dijBlock.getX(), dijBlock.getY());
                         }
                         path = dijkstraAlg.findPath(dijkstraAlg.findEndNode());
-
+                        if (!dijkstraAlg.hasSolution) {
+                            JOptionPane.showMessageDialog(null, "there is no path to the end point");
+                        }
                         repaint();
                     }
 
                 }
                 else if(selection.equals("By Holistic value")){
                     if (pathFinderEndNode != null && pathFinderStartNode != null) {
-                        BFS = new ByTheHolistic(pathFinderStartNode, pathFinderEndNode, 900 / gridDimention, 900 / gridDimention);
-                        BFS.addObserver(GUI.this);
+                        h = new ByTheHolistic(pathFinderStartNode, pathFinderEndNode, 900 / gridDimention, 900 / gridDimention);
+                        h.addObserver(GUI.this);
                         for (Node block : blocks) {
-                            Node BFSblock = new Node(block.getX() / gridDimention == 90 ? 89 : block.getX() / gridDimention, block.getY() / gridDimention == 90 ? 89 : block.getY() / gridDimention
+                            Node hBlock = new Node(block.getX() / gridDimention == 90 ? 89 : block.getX() / gridDimention, block.getY() / gridDimention == 90 ? 89 : block.getY() / gridDimention
                             );
-                            BFS.getGrid().flipNode(BFSblock.getX(), BFSblock.getY());
+                            h.getGrid().flipNode(hBlock.getX(), hBlock.getY());
                         }
-                        path = BFS.findPath(BFS.BFS());
-
-
-
+                        path = h.findPath(h.holistic());
+                        if (!h.hasSolution) {
+                            JOptionPane.showMessageDialog(null, "there is no path to the end point");
+                        }
                         repaint();
                     }
+
+                }
+                else if(selection.equals("BFS")){
 
                 }
             }
@@ -270,16 +277,14 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
         }
         g.setColor(Color.MAGENTA);
-        for (Node node : BFSunvisited) {
+        for (Node node : Hunvisited) {
             g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
         }
 
         g.setColor(Color.green);
-        for (Node node : BFSvisited) {
+        for (Node node : Hvisited) {
             g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
         }
-
-
 
         g.setColor(Color.lightGray);
         for (int y = 0; y < this.getHeight(); y += gridDimention) { //cp
@@ -462,8 +467,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 x.setColor(Color.green);
                 for (Node node : openNodes) {
                     x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
-
-
                 }
                 try {
                     TimeUnit.MILLISECONDS.sleep(2);
@@ -509,9 +512,9 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             String operation = (String) arg;
             ByTheHolistic d = (ByTheHolistic) o;
             if(operation.equals("v")){
-                PriorityQueue<Node> visit = d.getBFSvisited();
+                PriorityQueue<Node> visit = d.getHvisited();
                 visit.remove(pathFinderStartNode);
-                this.BFSvisited = visit;
+                this.Hvisited = visit;
                 Graphics x = getGraphics();
                 x.setColor(Color.green);
                 for (Node node : visit) {
@@ -524,9 +527,9 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 }
 
             }
-            else if(operation.equals("uv")){
-                PriorityQueue<Node> unvisit = d.getBFSunvisited();
-                this.BFSunvisited = d.getBFSunvisited();
+             if(operation.equals("uv")){
+                 Queue<Node> unvisit = d.getHunvisited();
+                this.Hunvisited = d.getHunvisited();
                 unvisit.remove(pathFinderStartNode);
                 Graphics x = getGraphics();
                 x.setColor(Color.magenta);
