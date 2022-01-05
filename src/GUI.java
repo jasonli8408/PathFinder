@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 //implements: are the tools were using to get input from the user from front end GUI
 public class GUI extends JPanel implements MouseWheelListener, MouseListener, KeyListener, ActionListener, MouseMotionListener, Observer{
-
     private JFrame window;
     private PathFinder pathFinder;
     private DijkstraAlg dijkstraAlg;
@@ -21,7 +20,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private PriorityQueue<Node> Hunvisited;
     private PriorityQueue<Node> closedNodes;
     private PriorityQueue<Node> openNodes;
-
+    private Queue<Node> options;
     private final static int gridDimention = 10;
     private Character keyRightNow;
     private Node GUIstartNode;
@@ -47,6 +46,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         visited = new PriorityQueue<>();
         Hvisited = new PriorityQueue<>();
         Hunvisited = new PriorityQueue<>();
+        options = new PriorityQueue<>();
         path = null;
         closedNodes = new PriorityQueue<>();
         openNodes = new PriorityQueue<>();
@@ -68,7 +68,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         window.setTitle("A* algorithm");
         window.pack();
         window.setVisible(true);
-
         revalidate();
         repaint();
 
@@ -230,6 +229,20 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
                 }
                 else if(selection.equals("BFS")){
+                    if (pathFinderEndNode != null && pathFinderStartNode != null) {
+                        bfs = new bfs(pathFinderStartNode, pathFinderEndNode, 900 / gridDimention, 900 / gridDimention);
+                        bfs.addObserver(GUI.this);
+                        for (Node block : blocks) {
+                            Node bfsBlock = new Node(block.getX() / gridDimention == 90 ? 89 : block.getX() / gridDimention, block.getY() / gridDimention == 90 ? 89 : block.getY() / gridDimention
+                            );
+                            bfs.getGrid().flipNode(bfsBlock.getX(), bfsBlock.getY());
+                        }
+                        path = bfs.findPath(bfs.BFS());
+                        if (!bfs.hasSolution) {
+                            JOptionPane.showMessageDialog(null, "there is no path to the end point");
+                        }
+                        repaint();
+                    }
 
                 }
             }
@@ -243,7 +256,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         p2.add(findPath);
         p2.add(mode);
         p2.add(selectMode);
-
         frame.setLayout(new BorderLayout());
         frame.add(p2,BorderLayout.LINE_END);
         frame.pack();
@@ -285,6 +297,13 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         for (Node node : Hvisited) {
             g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
         }
+
+        g.setColor(Color.MAGENTA);
+        for (Node node : options) {
+            g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
+        }
+
+
 
         g.setColor(Color.lightGray);
         for (int y = 0; y < this.getHeight(); y += gridDimention) { //cp
@@ -446,10 +465,8 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             if (operation.equals(p.CLOSED)) {
                 PriorityQueue<Node> closedList = p.getClosed();
                 closedNodes = closedList;
-
                 closedNodes.remove(pathFinderStartNode);
                 Graphics x = getGraphics();
-
                 x.setColor(Color.MAGENTA);
                 for (Node node : closedNodes) {
                     x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
@@ -541,6 +558,26 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+        }
+        else if(selection.equals("BFS")){
+            String operation = (String) arg;
+            bfs d = (bfs) o;
+            if(operation.equals("uv")){
+                Queue<Node> unvisited = d.getBFSunvisited();
+                unvisited.remove(pathFinderStartNode);
+                this.options = unvisited;
+                Graphics x = getGraphics();
+                x.setColor(Color.green);
+                for (Node node : unvisited) {
+                    x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
+                }
+                try {
+                    TimeUnit.MILLISECONDS.sleep(2);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
     }

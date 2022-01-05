@@ -7,7 +7,7 @@ public class bfs extends Observable {
     private Node endNode;
     private static final double DEFAULT_DISTANCE = Double.MAX_VALUE;
     private Grid  grid;
-    private boolean hasSolution;
+    public boolean hasSolution;
     private List<Node> path;
 
 
@@ -38,8 +38,8 @@ public class bfs extends Observable {
         while (!unsettled.isEmpty()) {
             Node curr = unsettled.poll();
 //            settled.add(curr);
-            setChanged();
-            notifyObservers("v");
+//            setChanged();
+//            notifyObservers("v");
             if (curr.getY() == endNode.getY() && curr.getX() == endNode.getX()) {
                 hasSolution = true;
                 return curr;
