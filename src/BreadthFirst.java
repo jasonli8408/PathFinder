@@ -58,16 +58,9 @@ public class BreadthFirst extends Observable {
                             setChanged();
                             notifyObservers("uv");
                         }
-
-
                     }
-
-
                 }
             }
-
-
-
         }
         return null;
     }

@@ -202,9 +202,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                             dijkstraAlg.getGrid().flipNode(dijBlock.getX(), dijBlock.getY());
                         }
                         path = dijkstraAlg.findPath(dijkstraAlg.findEndNode());
-                        if (!pathFinder.hasSolution) {
-                            JOptionPane.showMessageDialog(null, "there is no path to the end point");
-                        }
+
                         repaint();
                     }
 
@@ -221,9 +219,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                         path = BFS.findPath(BFS.BFS());
 
 
-                        if (!pathFinder.hasSolution) {
-                            JOptionPane.showMessageDialog(null, "there is no path to the end point");
-                        }
+
                         repaint();
                     }
 
@@ -521,7 +517,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                     x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
                 }
                 try {
-                    TimeUnit.MILLISECONDS.sleep(10);
+                    TimeUnit.MILLISECONDS.sleep(2);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -537,7 +533,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                     x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
                 }
                 try {
-                    TimeUnit.MILLISECONDS.sleep(10);
+                    TimeUnit.MILLISECONDS.sleep(2);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
