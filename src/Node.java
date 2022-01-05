@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.util.Objects;
 
 //this class represents a node in the graph
@@ -59,7 +58,7 @@ public class Node implements Comparable<Node>{
         return h;
     }
 
-    public Boolean getNode() { //check if node is an obstacle and if it is, don't calculate F
+    public Boolean isValidNode() { //check if node is an obstacle and if it is, don't calculate F
         return isNode;
     }
 

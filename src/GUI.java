@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class GUI extends JPanel implements MouseWheelListener, MouseListener, KeyListener, ActionListener, MouseMotionListener, Observer{
@@ -27,6 +28,14 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private Set<Node> blocks;
     private PriorityQueue<Node> closedNodes;
     private PriorityQueue<Node> openNodes;
+
+    private SwarmAlg swarmAlg;
+    private Node swarmStartNode;
+    private Node swarmEndNode;
+    private PriorityQueue<Node> unvisitedStart;
+    private PriorityQueue<Node> visitedStart;
+    private PriorityQueue<Node> unvisitedEnd;
+    private PriorityQueue<Node> visitedEnd;
 
     private static final int INCREMENT_SIZE = 300;
     private JComboBox selectMode;
@@ -60,6 +69,13 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         window = new JFrame();
         window.setContentPane(this);
         window.getContentPane().setPreferredSize(new Dimension(900,900));
+
+        unvisitedStart = new PriorityQueue<>();
+        visitedStart = new PriorityQueue<>();
+        unvisitedEnd = new PriorityQueue<>();
+        visitedEnd = new PriorityQueue<>();
+        swarmStartNode = null;
+        swarmEndNode = null;
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //how it would close
         window.setTitle("A* algorithm");
@@ -110,10 +126,11 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
         mode = new JLabel("mode: ");
         mode.setHorizontalAlignment(JLabel.CENTER);
-        String[] modes = {"A star", "Dijkstra"};
+        String[] modes = {"A star", "Dijkstra", "Bidirectional Dijkstra"};
         selectMode = new JComboBox<>();
         selectMode.addItem(modes[0]);
         selectMode.addItem(modes[1]);
+        selectMode.addItem(modes[2]);
         selectMode.setSelectedIndex(1);
 
 
@@ -130,6 +147,10 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 openNodes = new PriorityQueue<>();
                 visited = new PriorityQueue<>();
                 unvisited = new PriorityQueue<>();
+                visitedStart = new PriorityQueue<>();
+                unvisitedStart = new PriorityQueue<>();
+                visitedEnd = new PriorityQueue<>();
+                unvisitedEnd = new PriorityQueue<>();
                 path = null;
                 repaint();
 
@@ -182,6 +203,10 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 openNodes = new PriorityQueue<>();
                 visited = new PriorityQueue<>();
                 unvisited = new PriorityQueue<>();
+                visitedStart = new PriorityQueue<>();
+                unvisitedStart = new PriorityQueue<>();
+                visitedEnd = new PriorityQueue<>();
+                unvisitedEnd = new PriorityQueue<>();
                 repaint();
 
                 JOptionPane.showMessageDialog(null, "Everything is cleared!");
@@ -240,7 +265,23 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                         repaint();
 
                     }
+                } else if (selection.equals("Bidirectional Dijkstra")){
+                    if (swarmEndNode != null && swarmStartNode != null) {
+                        swarmAlg = new SwarmAlg(swarmStartNode, swarmEndNode, 900 / gridDimention, 900 / gridDimention);
+                        swarmAlg.addObserver(GUI.this);
 
+                        for (Node block : blocks) {
+
+
+                            Node swarmBlock = new Node(block.getX() / gridDimention == 90 ? 89 : block.getX() / gridDimention, block.getY() / gridDimention == 90 ? 89 : block.getY() / gridDimention
+                            );
+                            swarmAlg.getGrid().makeBlock(swarmBlock.getX(), swarmBlock.getY());
+                        }
+
+                        path = swarmAlg.findPath(swarmAlg.findIntersection());
+
+                        repaint();
+                    }
                 }
             }
         });
@@ -299,6 +340,30 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
         }
 
+        g.setColor(Color.MAGENTA);
+        for (Node node : unvisitedStart) {
+            g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
+        }
+
+        g.setColor(Color.green);
+        for (Node node : visitedStart) {
+
+            g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
+
+        }
+
+        g.setColor(Color.ORANGE);
+        for (Node node : unvisitedEnd) {
+            g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
+        }
+
+        g.setColor(Color.CYAN);
+        for (Node node : visitedEnd) {
+            g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
+
+
+        }
+
         g.setColor(Color.lightGray);
         for (int y = 0; y < this.getHeight(); y += gridDimention) { //cp
             for (int x = 0; x < this.getWidth(); x += gridDimention) {
@@ -312,6 +377,26 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         }
 
         if (startNode != null) {
+            g.setColor(Color.blue);
+            g.fillRect(startNode.getX() + 1, startNode.getY() + 1, gridDimention - 1, gridDimention - 1);
+        }
+
+        if (DijEndNode != null) {
+            g.setColor(Color.red);
+            g.fillRect(endNode.getX() + 1, endNode.getY() + 1, gridDimention - 1, gridDimention - 1);
+        }
+
+        if (DijStartNode != null) {
+            g.setColor(Color.blue);
+            g.fillRect(startNode.getX() + 1, startNode.getY() + 1, gridDimention - 1, gridDimention - 1);
+        }
+
+        if (swarmEndNode != null) {
+            g.setColor(Color.red);
+            g.fillRect(endNode.getX() + 1, endNode.getY() + 1, gridDimention - 1, gridDimention - 1);
+        }
+
+        if (swarmStartNode != null) {
             g.setColor(Color.blue);
             g.fillRect(startNode.getX() + 1, startNode.getY() + 1, gridDimention - 1, gridDimention - 1);
         }
@@ -390,7 +475,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
 
-        } else {
+        } else if (selection.equals("Dijkstra")) {
             if (SwingUtilities.isLeftMouseButton(e)) {
                 if (keyRightNow == 'e' || keyRightNow == 'E') {
                     isEndOn++;
@@ -417,6 +502,32 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 }
             }
 
+        } else{
+            if (SwingUtilities.isLeftMouseButton(e)) {
+                if (keyRightNow == 'e' || keyRightNow == 'E') {
+                    isEndOn++;
+                    int xSub = e.getX() % gridDimention;
+                    int ySub = e.getY() % gridDimention;
+                    if (isEndOn % 2 == 1 && endNode == null) {
+                        endNode = new Node(e.getX() - xSub, e.getY() - ySub);
+                        swarmEndNode = new Node(endNode.getX() / gridDimention, endNode.getY() / gridDimention);
+                    } else {
+                        endNode = null;
+                    }
+                    repaint();
+
+                } else if (keyRightNow == 's' || keyRightNow == 'S') {
+                    int xSub = e.getX() % gridDimention;
+                    int ySub = e.getY() % gridDimention;
+
+                    if (startNode == null) {
+                        startNode = new Node(e.getX() - xSub, e.getY() - ySub);
+                        swarmStartNode = new Node(startNode.getX() / gridDimention, startNode.getY() / gridDimention);
+                    }
+
+                    repaint();
+                }
+            }
         }
     }
 
@@ -527,7 +638,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 //                    e.printStackTrace();
 //                }
             }
-        } else {
+        } else if (selection.equals("Dijkstra")){
 
             String operation = (String) arg;
             DijkstraAlg d = (DijkstraAlg) o;
@@ -567,6 +678,80 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 //                    e.printStackTrace();
 //                }
 
+            }
+        } else {
+            String operation = (String) arg;
+            SwarmAlg s = (SwarmAlg) o;
+
+
+            if (operation.equals(s.UNVISITED)) {
+                PriorityQueue<Node> unvisitedStart = s.getUnvisitedStart();
+                this.unvisitedStart = unvisitedStart;
+
+                this.unvisitedStart.remove(swarmStartNode);
+                Graphics x = getGraphics();
+
+                x.setColor(Color.MAGENTA);
+                for (Node node : this.unvisitedStart) {
+                    x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
+                }
+
+                try {
+                    TimeUnit.MILLISECONDS.sleep(3);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                PriorityQueue<Node> unvisitedEnd = s.getUnvisitedEnd();
+                this.unvisitedEnd = unvisitedEnd;
+
+                this.unvisitedEnd.remove(swarmEndNode);
+
+                x.setColor(Color.ORANGE);
+                for (Node node : this.unvisitedEnd) {
+                    x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
+                }
+
+                try {
+                    TimeUnit.MILLISECONDS.sleep(3);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+
+            } else if (operation.equals(s.VISITED)) {
+                PriorityQueue<Node> visitedStart = s.getVisitedStart();
+                this.visitedStart = visitedStart;
+
+                this.visitedStart.remove(swarmStartNode);
+                Graphics x = getGraphics();
+
+                x.setColor(Color.GREEN);
+                for (Node node : this.visitedStart) {
+                    x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
+                }
+
+                try {
+                    TimeUnit.MILLISECONDS.sleep(3);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                PriorityQueue<Node> visitedEnd = s.getVisitedEnd();
+                this.visitedEnd = visitedEnd;
+
+                this.visitedEnd.remove(swarmEndNode);
+
+                x.setColor(Color.CYAN);
+                for (Node node : this.visitedEnd) {
+                    x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
+                }}
+
+            try {
+                TimeUnit.MILLISECONDS.sleep(3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
