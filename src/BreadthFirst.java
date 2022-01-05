@@ -42,6 +42,7 @@ public class BreadthFirst extends Observable {
             setChanged();
             notifyObservers("v");
             if (curr.equals(endNode)) {
+                hasSolution = true;
                 return curr;
             }
             List<Node> children = findChildren(curr);
@@ -55,7 +56,7 @@ public class BreadthFirst extends Observable {
                             neighbor.parent = curr;
                             unsettled.add(neighbor);
                             setChanged();
-                            notifyObservers(UNVISITED);
+                            notifyObservers("uv");
                         }
 
 
@@ -103,6 +104,10 @@ public class BreadthFirst extends Observable {
     public PriorityQueue<Node> getBFSvisited() {
         return settled;
     }
+    public PriorityQueue<Node> getBFSunvisited() {
+        return unsettled;
+    }
+
 
 
     public List<Node> findChildren(Node node) {

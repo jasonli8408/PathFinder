@@ -43,6 +43,7 @@ public class DijkstraAlg extends Observable {
             setChanged(); 
             notifyObservers(VISITED);
             if (curr.equals(endNode)) {
+                hasSolution = true;
                 return curr;
             }
             List<Node> children = findChildren(curr);

@@ -21,6 +21,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private PriorityQueue<Node> unvisited;
     private PriorityQueue<Node> visited;
     private PriorityQueue<Node> BFSvisited;
+    private PriorityQueue<Node> BFSunvisited;
     private final static int gridDimention = 10;
     private Character keyRightNow;
     private Node GUIstartNode;
@@ -46,6 +47,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         unvisited = new PriorityQueue<>();
         visited = new PriorityQueue<>();
         BFSvisited = new PriorityQueue<>();
+        BFSunvisited = new PriorityQueue<>();
         path = null;
         closedNodes = new PriorityQueue<>();
         openNodes = new PriorityQueue<>();
@@ -200,6 +202,9 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                             dijkstraAlg.getGrid().flipNode(dijBlock.getX(), dijBlock.getY());
                         }
                         path = dijkstraAlg.findPath(dijkstraAlg.findEndNode());
+                        if (!pathFinder.hasSolution) {
+                            JOptionPane.showMessageDialog(null, "there is no path to the end point");
+                        }
                         repaint();
                     }
 
@@ -214,6 +219,11 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                             BFS.getGrid().flipNode(BFSblock.getX(), BFSblock.getY());
                         }
                         path = BFS.findPath(BFS.BFS());
+
+
+                        if (!pathFinder.hasSolution) {
+                            JOptionPane.showMessageDialog(null, "there is no path to the end point");
+                        }
                         repaint();
                     }
 
@@ -262,11 +272,16 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         for (Node node : visited) {
             g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
         }
+        g.setColor(Color.MAGENTA);
+        for (Node node : BFSunvisited) {
+            g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
+        }
 
         g.setColor(Color.green);
         for (Node node : BFSvisited) {
             g.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
         }
+
 
 
         g.setColor(Color.lightGray);
@@ -499,13 +514,30 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
             if(operation.equals("v")){
                 PriorityQueue<Node> visit = d.getBFSvisited();
                 visit.remove(pathFinderStartNode);
+                this.BFSvisited = visit;
                 Graphics x = getGraphics();
                 x.setColor(Color.green);
                 for (Node node : visit) {
                     x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
                 }
                 try {
-                    TimeUnit.MILLISECONDS.sleep(1);
+                    TimeUnit.MILLISECONDS.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            else if(operation.equals("uv")){
+                PriorityQueue<Node> unvisit = d.getBFSunvisited();
+                this.BFSunvisited = d.getBFSunvisited();
+                unvisit.remove(pathFinderStartNode);
+                Graphics x = getGraphics();
+                x.setColor(Color.yellow);
+                for (Node node : unvisit) {
+                    x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
+                }
+                try {
+                    TimeUnit.MILLISECONDS.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
