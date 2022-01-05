@@ -75,6 +75,7 @@ public class MazeGenerator {
                         grid.getNode(wx, i).makeDoor();
                     }
                 }
+                ///
             } else {
                 for (int i = y; i < y + width - 1; i++) {
                     if (i != door) {

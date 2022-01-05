@@ -163,7 +163,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
 
-
+///////
         clearEverything = new JButton("Clear Everything");
         clearEverything.setSize(new Dimension(10, 40));
         clearEverything.setBorder(new RoundedBorder(10));
