@@ -538,11 +538,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
-
-
         }
-
     }
 }
