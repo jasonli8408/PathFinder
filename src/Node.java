@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.Objects;
 
 //this class represents a node in the graph
@@ -88,8 +89,14 @@ public class Node implements Comparable<Node>{
     }
 
     //
-    public void flipNode() {
-        isNode = !isNode;
+    public void makeBlock() {
+        isNode = false;
+
+    }
+
+
+    public void makePath() {
+        isNode = true;
     }
 
     public boolean isNode(){

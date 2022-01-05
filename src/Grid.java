@@ -25,8 +25,12 @@ public class Grid {
         return grid[rows][column];
     }
 
-    public void flipNode(int rows, int column){
-        grid[rows][column].flipNode();
+    public void makeBlock(int rows, int column){
+        grid[rows][column].makeBlock();
+    }
+
+    public void makePath(int rows, int cols) {
+        grid[rows][cols].makePath();
     }
 
     public boolean isValidNode(int rows, int column){

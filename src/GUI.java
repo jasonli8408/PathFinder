@@ -1,14 +1,9 @@
-import javafx.scene.control.SelectionMode;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.AffineTransform;
 import java.util.*;
 import java.util.List;
-import java.util.Timer;
-import java.util.concurrent.TimeUnit;
 
 
 public class GUI extends JPanel implements MouseWheelListener, MouseListener, KeyListener, ActionListener, MouseMotionListener, Observer{
@@ -20,7 +15,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private Node DijEndNode;
     private PriorityQueue<Node> unvisited;
     private PriorityQueue<Node> visited;
-    private final static int gridDimention = 10;
+    private final static int gridDimention = 30;
     private Character keyRightNow;
     private Node startNode;
     private Node endNode;
@@ -35,6 +30,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
     private static final int INCREMENT_SIZE = 300;
     private JComboBox selectMode;
+    private MazeGenerator mazeGenerator;
 
 
 
@@ -42,6 +38,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
     public GUI() {
+        mazeGenerator = new MazeGenerator(new Grid(90,90));
         DijStartNode = null;
         DijEndNode = null;
         unvisited = new PriorityQueue<>();
@@ -85,7 +82,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         // Font size and style
         Font font = new Font("Verdana", Font.BOLD, 30);
 
-        JButton clearObstacles, clearEverything, findPath;
+        JButton clearObstacles, clearEverything, findPath, makeMaze;
 
         JLabel mode;
 
@@ -141,6 +138,30 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         });
 
         //
+
+        makeMaze = new JButton("make maze");
+        makeMaze.setSize(new Dimension(10,40));
+        makeMaze.setBorder(new RoundedBorder(10));
+        makeMaze.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Set<Node> blocks2 = mazeGenerator.makeMaze(0,0,90,90);
+
+                for (Node block : blocks2) {
+
+
+                    Node pathfindingBlock = new Node(block.getX() * gridDimention,block.getY() * gridDimention);;
+                    blocks.add(pathfindingBlock);
+                }
+
+                repaint();
+
+            }
+        });
+
+
+
+
         clearEverything = new JButton("Clear Everything");
         clearEverything.setSize(new Dimension(10, 40));
         clearEverything.setBorder(new RoundedBorder(10));
@@ -186,7 +207,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
                             Node pathfindingBlock = new Node(block.getX() / gridDimention == 90 ? 89 : block.getX() / gridDimention, block.getY() / gridDimention == 90 ? 89 : block.getY() / gridDimention
                             );
-                            pathFinder.getGrid().flipNode(pathfindingBlock.getX(), pathfindingBlock.getY());
+                            pathFinder.getGrid().makeBlock(pathfindingBlock.getX(), pathfindingBlock.getY());
                         }
                         path = pathFinder.findPath(pathFinder.aStar());
 
@@ -209,7 +230,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
                             Node dijBlock = new Node(block.getX() / gridDimention == 90 ? 89 : block.getX() / gridDimention, block.getY() / gridDimention == 90 ? 89 : block.getY() / gridDimention
                             );
-                            dijkstraAlg.getGrid().flipNode(dijBlock.getX(), dijBlock.getY());
+                            dijkstraAlg.getGrid().makeBlock(dijBlock.getX(), dijBlock.getY());
                         }
 
 
@@ -225,11 +246,12 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
         JPanel p2 = new JPanel();
-        p2.setLayout(new GridLayout(5,1));
+        p2.setLayout(new GridLayout(7,1));
         p2.add(clearObstacles);
         p2.add(clearEverything);
         p2.add(findPath);
         p2.add(mode);
+        p2.add(makeMaze);
         p2.add(selectMode);
 
         frame.setLayout(new BorderLayout());
@@ -482,11 +504,11 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 for (Node node : closedNodes) {
                     x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
                 }
-                try {
-                    TimeUnit.MILLISECONDS.sleep(2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    TimeUnit.MILLISECONDS.sleep(2);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             } else if (operation.equals(PathFinder.OPEN)) {
                 PriorityQueue<Node> openList = p.getOpenList();
                 openNodes = openList;
@@ -498,11 +520,11 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
                 }
-                try {
-                    TimeUnit.MILLISECONDS.sleep(2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    TimeUnit.MILLISECONDS.sleep(2);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             }
         } else {
 
@@ -521,11 +543,11 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 for (Node node : this.unvisited) {
                     x.fillRect(node.getX() * gridDimention + 1, node.getY() * gridDimention + 1, gridDimention - 1, gridDimention - 1);
                 }
-                try {
-                    TimeUnit.MILLISECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    TimeUnit.MILLISECONDS.sleep(2);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             } else if (operation.equals(d.VISITED)) {
                 PriorityQueue<Node> visit = d.getSettled();
                 visited = visit;
@@ -537,11 +559,13 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
                 }
-                try {
-                    TimeUnit.MILLISECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
+//               try {
+//                    TimeUnit.MILLISECONDS.sleep(2);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+
             }
         }
     }

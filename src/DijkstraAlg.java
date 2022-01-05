@@ -4,7 +4,6 @@ import java.util.*;
 public class DijkstraAlg extends Observable {
     private PriorityQueue<Node> unsettled;
     private PriorityQueue<Node> settled;
-
     private Node start;
     private Node endNode;
     private static final double DEFAULT_DISTANCE = Double.MAX_VALUE;
@@ -22,7 +21,7 @@ public class DijkstraAlg extends Observable {
         unsettled = new PriorityQueue<>();
         settled = new PriorityQueue<>();
         this.start = start;
-        start.f = 0;
+        this.start.f = 0;
 
         grid = new Grid(row, col);
         this.endNode = endNode;
@@ -41,7 +40,7 @@ public class DijkstraAlg extends Observable {
     public Node findEndNode() {
 
         while (!unsettled.isEmpty()) {
-            Node curr = unsettled.poll();
+            Node curr = unsettled.poll(); // this is when you actually syep on the node
             settled.add(curr);
             setChanged(); 
             notifyObservers(VISITED);
@@ -54,8 +53,8 @@ public class DijkstraAlg extends Observable {
             for (Node neighbor : children) {
 
                 if (neighbor != null) {
-                    double tempf = Double.MAX_VALUE;
-                    if (neighbor != null) {
+                    double tempf;
+
 
                         if (Math.abs(curr.getX() - neighbor.getX()) == 1 && Math.abs(curr.getY() - neighbor.getY()) == 1) {
                             tempf = curr.f + 1.4;
@@ -63,13 +62,16 @@ public class DijkstraAlg extends Observable {
                             tempf = curr.f + 1;
                         }
 
-                    }
 
 
-                    if (!settled.contains(neighbor)) {
-                        if (tempf < neighbor.f) {
+
+                    if (!settled.contains(neighbor)) { //you can not step on a node that is already visited
+                        if (tempf < neighbor.f) { // checking if temp f is smaller than the already determeined f value
                             neighbor.f = tempf;
                             neighbor.parent = curr;
+                            if (unsettled.contains(neighbor)) {
+                                unsettled.remove(neighbor);
+                            }
                             unsettled.add(neighbor);
                             setChanged();
                             notifyObservers(UNVISITED);
