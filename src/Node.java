@@ -92,6 +92,7 @@ public class Node implements Comparable<Node>{
     //
     public void makeBlock() {
         isNode = false;
+        isDoor = false;
 
     }
 

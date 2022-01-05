@@ -33,10 +33,17 @@ public class Grid {
         grid[rows][cols].makePath();
     }
 
+
+    public boolean isNotDoor(int rows, int col) {
+        return !grid[rows][col].isDoor();
+    }
+
     public boolean isValidNode(int rows, int column){
 
             return grid[rows][column].isNode();
         }
+
+
 
 
 

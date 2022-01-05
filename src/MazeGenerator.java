@@ -1,5 +1,4 @@
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -7,7 +6,6 @@ public class MazeGenerator {
     private Grid grid;
     private boolean horizontal;
     private Set<Node> blocks;
-
 
     public MazeGenerator(Grid grid) {
         this.grid = grid;
@@ -30,6 +28,30 @@ public class MazeGenerator {
     }
 
 
+    public boolean isStartRow(int x) {
+        for (int i = 0 ; i < grid.getCols() ; i++) {
+                if (!(grid.isValidNode(x,i))) {
+                    return false;
+                }
+            }
+
+
+        return true;
+    }
+
+
+    public boolean isStartCol(int y) {
+        for (int i = 0 ; i < grid.getRows() ; i++) {
+            if (!(grid.isValidNode(i,y))) {
+                return false;
+            }
+        }
+
+
+        return true;
+    }
+
+
     public Set<Node> makeMaze(int x, int y, int width, int height) {
         Random rand = new Random();
         //base case
@@ -44,32 +66,55 @@ public class MazeGenerator {
             //horizontal
             int wx = x + rand.nextInt(height - 1);
             int door = y + rand.nextInt(width - 1);
-            for (int i = y ; i < width ; i++) {
-                if (i != door && !grid.getNode(wx,i).isDoor()) {
-                    grid.getNode(wx, i).makeBlock();
-                    blocks.add(grid.getNode(wx,i));
-                } else if (i == door) {
-                    grid.getNode(wx, i).makeDoor();
+            if (isStartRow(wx) && y == 0) {
+                for (int i = y ; i < grid.getCols() ; i++) {
+                    if (i != door) {
+                        grid.getNode(wx, i).makeBlock();
+                        blocks.add(grid.getNode(wx,i));
+                    } else {
+                        grid.getNode(wx, i).makeDoor();
+                    }
+                }
+            } else {
+                for (int i = y; i < y + width - 1; i++) {
+                    if (i != door) {
+                        grid.getNode(wx, i).makeBlock();
+                        blocks.add(grid.getNode(wx, i));
+                    } else {
+                        grid.getNode(wx, i).makeDoor();
+                    }
                 }
             }
-            makeMaze(x , y,width,wx - x);
-            makeMaze(wx + 1 , y, width, height - wx - 1);
+            makeMaze(x , y,width,wx - x + 1);
+            makeMaze(wx + 1 , y, width, height - wx);
         } else {
             int wy = y + rand.nextInt(width - 1);
             int door = x + rand.nextInt(height - 1);
 
-            for (int i = x ; i < height ; i++) {
-                if (i != door && !grid.getNode(i, wy).isDoor()) {
-                    grid.makeBlock(i, wy);
-                    blocks.add(grid.getNode(i, wy));
-                } else if (i == door) {
-                    grid.getNode(i, wy).makeDoor();
+            if (isStartCol(wy) && x ==0) { // checks if this row has not been modified
+                for (int i = x ; i < grid.getRows() ; i++) {
+                    if (i != door) {
+                        grid.makeBlock(i, wy);
+                        blocks.add(grid.getNode(i, wy));
+                    } else {
+                        grid.getNode(i, wy).makeDoor();
+                    }
+                }
+            } else {
 
+                for (int i = x; i < x + height - 1; i++) {
+                    if (i != door) {
+                        grid.makeBlock(i, wy);
+                        blocks.add(grid.getNode(i, wy));
+                    } else {
+                        grid.getNode(i, wy).makeDoor();
+                    }
                 }
             }
 
-            makeMaze(x,y, wy - y, height);
-            makeMaze(x,wy + 1, width - wy - 1 , height);
+
+            makeMaze(x,y, wy - y + 1, height);
+            makeMaze(x,wy + 1, width - wy , height);
 
         }
 
