@@ -28,6 +28,9 @@ public class Grid {
     public void makeBlock(int rows, int column){
         grid[rows][column].makeBlock();
     }
+    public void flipNode(int rows, int column){
+        grid[rows][column].flipNode();
+    }
 
     public void makePath(int rows, int cols) {
         grid[rows][cols].makePath();

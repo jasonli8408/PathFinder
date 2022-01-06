@@ -1,10 +1,8 @@
-import java.lang.reflect.Proxy;
 import java.util.*;
 
-public class DijkstraAlg extends Observable {
+public class ByTheHolistic extends Observable {
     private PriorityQueue<Node> unsettled;
     private PriorityQueue<Node> settled;
-
     private Node start;
     private Node endNode;
     private static final double DEFAULT_DISTANCE = Double.MAX_VALUE;
@@ -16,7 +14,7 @@ public class DijkstraAlg extends Observable {
 
 
 
-    public DijkstraAlg(Node start, Node endNode,  int row, int col) {
+    public ByTheHolistic(Node start, Node endNode, int row, int col) {
         path = new LinkedList<>();
         hasSolution = false;
         unsettled = new PriorityQueue<>();
@@ -28,7 +26,7 @@ public class DijkstraAlg extends Observable {
         unsettled.add(start);
         for (int i = 0 ; i < grid.getCols() ; i++) {
             for (int j = 0 ; j < grid.getRows() ; j++) {
-                Node node = grid.getNode(i, j);
+                Node node = grid.getNode(j, i);
                 if (node != start) {
                     node.f = DEFAULT_DISTANCE;
                 }
@@ -36,12 +34,12 @@ public class DijkstraAlg extends Observable {
         }
     }
 
-    public Node findEndNode() {
+    public Node holistic() {
         while (!unsettled.isEmpty()) {
             Node curr = unsettled.poll();
             settled.add(curr);
             setChanged();
-            notifyObservers(VISITED);
+            notifyObservers("v");
             if (curr.equals(endNode)) {
                 hasSolution = true;
                 return curr;
@@ -50,32 +48,18 @@ public class DijkstraAlg extends Observable {
             for (Node neighbor : children) {
                 if (neighbor != null) {
                     double tempf;
-
-                    if (Math.abs(curr.getX() - neighbor.getX()) == 1 && Math.abs(curr.getY() - neighbor.getY()) == 1) {
-                        tempf = curr.f + 1.4;
-                    }
-                    else {
-                        tempf = curr.f + 1;
-                    }
-
+                    tempf = neighbor.calcH(endNode);
                     if (!settled.contains(neighbor)) {
                         if (tempf < neighbor.f) {
                             neighbor.f = tempf;
                             neighbor.parent = curr;
                             unsettled.add(neighbor);
                             setChanged();
-                            notifyObservers(UNVISITED);
+                            notifyObservers("uv");
                         }
-
-
                     }
-
-
                 }
             }
-
-
-
         }
         hasSolution = false;
         return null;
@@ -105,13 +89,14 @@ public class DijkstraAlg extends Observable {
     }
 
 
-    public PriorityQueue<Node> getUnsettled() {
+
+    public PriorityQueue<Node> getHvisited() {
+        return settled;
+    }
+    public PriorityQueue<Node> getHunvisited() {
         return unsettled;
     }
 
-    public PriorityQueue<Node> getSettled() {
-        return settled;
-    }
 
 
     public List<Node> findChildren(Node node) {

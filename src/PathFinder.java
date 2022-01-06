@@ -87,10 +87,6 @@ public class PathFinder extends Observable {
     }
 
     public List<Node> findPath(Node end) {
-        if (!hasSolution) {
-            hasSolution = false;
-
-        }
         //since each node only has ONE parent, we can simply traverse back to the starting point
         if (end == null) {
             return path;

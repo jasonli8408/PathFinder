@@ -95,7 +95,9 @@ public class Node implements Comparable<Node>{
         isDoor = false;
 
     }
-
+    public void flipNode() {
+        isNode = !isNode;
+    }
 
     public void makePath() {
         isNode = true;
