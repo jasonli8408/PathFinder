@@ -1,3 +1,4 @@
+
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -30,10 +31,10 @@ public class MazeGenerator {
 
     public boolean isStartRow(int x) {
         for (int i = 0 ; i < grid.getCols() ; i++) {
-                if (!(grid.isValidNode(x,i))) {
-                    return false;
-                }
+            if (!(grid.isValidNode(x,i)) && grid.isNotDoor(x,i)) {
+                return false;
             }
+        }
 
 
         return true;
@@ -42,7 +43,7 @@ public class MazeGenerator {
 
     public boolean isStartCol(int y) {
         for (int i = 0 ; i < grid.getRows() ; i++) {
-            if (!(grid.isValidNode(i,y))) {
+            if (!(grid.isValidNode(i,y)) && grid.isNotDoor(i,y)) {
                 return false;
             }
         }
@@ -66,22 +67,23 @@ public class MazeGenerator {
             //horizontal
             int wx = x + rand.nextInt(height - 1);
             int door = y + rand.nextInt(width - 1);
+            int door2 = y + rand.nextInt(width - 1);
             if (isStartRow(wx) && y == 0) {
                 for (int i = y ; i < grid.getCols() ; i++) {
-                    if (i != door) {
+                    if (i != door && i != door2 && grid.isNotDoor(wx, i)) {
                         grid.getNode(wx, i).makeBlock();
                         blocks.add(grid.getNode(wx,i));
-                    } else {
+                    } else if (i == door || i == door2){
                         grid.getNode(wx, i).makeDoor();
                     }
                 }
                 ///
             } else {
                 for (int i = y; i < y + width - 1; i++) {
-                    if (i != door) {
+                    if (i != door && i != door2 && grid.isNotDoor(wx, i)) {
                         grid.getNode(wx, i).makeBlock();
                         blocks.add(grid.getNode(wx, i));
-                    } else {
+                    } else if (i == door || i == door2) {
                         grid.getNode(wx, i).makeDoor();
                     }
                 }
@@ -91,24 +93,31 @@ public class MazeGenerator {
         } else {
             int wy = y + rand.nextInt(width - 1);
             int door = x + rand.nextInt(height - 1);
+            int door2 = x + rand.nextInt(height - 1);
 
             if (isStartCol(wy) && x ==0) { // checks if this row has not been modified
                 for (int i = x ; i < grid.getRows() ; i++) {
-                    if (i != door) {
+                    if (i != door && i != door2 && grid.isNotDoor(i,wy)) {
                         grid.makeBlock(i, wy);
                         blocks.add(grid.getNode(i, wy));
                     } else {
-                        grid.getNode(i, wy).makeDoor();
+                        if (i == door) {
+                            grid.getNode(i, wy).makeDoor();
+                        } else if (i == door2) {
+                            grid.getNode(i, wy).makeDoor();
+                        }
                     }
                 }
             } else {
 
                 for (int i = x; i < x + height - 1; i++) {
-                    if (i != door) {
+                    if (i != door && i != door2 && grid.isNotDoor(i, wy)) {
                         grid.makeBlock(i, wy);
                         blocks.add(grid.getNode(i, wy));
                     } else {
-                        grid.getNode(i, wy).makeDoor();
+                        if (i == door || i == door2) {
+                            grid.getNode(i, wy).makeDoor();
+                        }
                     }
                 }
             }

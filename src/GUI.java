@@ -160,7 +160,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
         //
 
-        makeMaze = new JButton("make maze");
+        makeMaze = new JButton("recursively make random maze");
         makeMaze.setSize(new Dimension(10,40));
         makeMaze.setBorder(new RoundedBorder(10));
         makeMaze.addActionListener(new ActionListener() {
