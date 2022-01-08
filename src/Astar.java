@@ -1,7 +1,7 @@
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class PathFinder extends Observable {
+public class Astar extends Observable {
     private final PriorityQueue<Node> closedList;
     private final PriorityQueue<Node> openList;
     private final Node startNode;
@@ -14,7 +14,7 @@ public class PathFinder extends Observable {
 
 
 
-    public PathFinder(Node start, Node end, int row, int col) {
+    public Astar(Node start, Node end, int row, int col) {
         startNode = start;
         endNode = end;
         closedList = new PriorityQueue<>();

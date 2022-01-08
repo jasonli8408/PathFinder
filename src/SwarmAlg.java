@@ -169,9 +169,11 @@ public class SwarmAlg extends Observable {
             return false;
         }
         for (Node node: lst){
-            if (node.isValidNode()) {
-                if (node.equals(node2)) {
-                    return true;
+            if (node != null) {
+                if (node.isValidNode()) {
+                    if (node.equals(node2)) {
+                        return true;
+                    }
                 }
             }
         }

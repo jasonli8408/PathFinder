@@ -1,8 +1,8 @@
 import java.util.*;
 
 public class ByTheHolistic extends Observable {
-    private PriorityQueue<Node> unsettled;
-    private PriorityQueue<Node> settled;
+    private PriorityQueue<Node> unvisited;
+    private PriorityQueue<Node> visited;
     private Node start;
     private Node endNode;
     private static final double DEFAULT_DISTANCE = Double.MAX_VALUE;
@@ -17,13 +17,13 @@ public class ByTheHolistic extends Observable {
     public ByTheHolistic(Node start, Node endNode, int row, int col) {
         path = new LinkedList<>();
         hasSolution = false;
-        unsettled = new PriorityQueue<>();
-        settled = new PriorityQueue<>();
+        unvisited = new PriorityQueue<>();
+        visited = new PriorityQueue<>();
         this.start = start;
         start.f = 0;
         grid = new Grid(row, col);
         this.endNode = endNode;
-        unsettled.add(start);
+        unvisited.add(start);
         for (int i = 0 ; i < grid.getCols() ; i++) {
             for (int j = 0 ; j < grid.getRows() ; j++) {
                 Node node = grid.getNode(j, i);
@@ -35,9 +35,9 @@ public class ByTheHolistic extends Observable {
     }
 
     public Node holistic() {
-        while (!unsettled.isEmpty()) {
-            Node curr = unsettled.poll();
-            settled.add(curr);
+        while (!unvisited.isEmpty()) {
+            Node curr = unvisited.poll();
+            visited.add(curr);
             setChanged();
             notifyObservers("v");
             if (curr.equals(endNode)) {
@@ -49,11 +49,11 @@ public class ByTheHolistic extends Observable {
                 if (neighbor != null) {
                     double tempf;
                     tempf = neighbor.calcH(endNode);
-                    if (!settled.contains(neighbor)) {
+                    if (!visited.contains(neighbor)) {
                         if (tempf < neighbor.f) {
                             neighbor.f = tempf;
                             neighbor.parent = curr;
-                            unsettled.add(neighbor);
+                            unvisited.add(neighbor);
                             setChanged();
                             notifyObservers("uv");
                         }
@@ -80,7 +80,7 @@ public class ByTheHolistic extends Observable {
 
     public Node getEndNode() {
         Node ans = null;
-        for (Node node : settled) {
+        for (Node node : visited) {
             if (node.equals(endNode)) {
                 ans =  node;
             }
@@ -91,10 +91,10 @@ public class ByTheHolistic extends Observable {
 
 
     public PriorityQueue<Node> getHvisited() {
-        return settled;
+        return visited;
     }
     public PriorityQueue<Node> getHunvisited() {
-        return unsettled;
+        return unvisited;
     }
 
 

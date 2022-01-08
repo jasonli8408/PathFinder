@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 public class GUI extends JPanel implements MouseWheelListener, MouseListener, KeyListener, ActionListener, MouseMotionListener, Observer{
@@ -12,11 +11,11 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private JFrame window;
 
     //algorithms:
-    private PathFinder pathFinder;
+    private Astar pathFinder;
     private DijkstraAlg dijkstraAlg;
     private SwarmAlg swarmAlg;
     private ByTheHolistic h;
-    private bfs bfs;
+    private BFS bfs;
     private MazeGenerator mazeGenerator;
 
     //starting node and ending node:
@@ -45,7 +44,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private Queue<Node> options;
 
     //GUI manipulations:
-    private final static int gridDimention = 10;
+    private final static int gridDimention = 30;
     private Character keyRightNow;
     int isStartOn = 0;
     int isEndOn = 0;
@@ -53,7 +52,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
     private Set<Node> blocks;
     private JComboBox selectMode;
 
-
+    String[] modes = {"A star", "Dijkstra",  "By Holistic value", "BFS", "Bidirectional Dijkstra"};
 
 
 
@@ -108,7 +107,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
 
-    //
+
     {
         JFrame frame = new JFrame();
         frame.setTitle("Control Panel");
@@ -144,7 +143,6 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         }
         mode = new JLabel("mode: ");
         mode.setHorizontalAlignment(JLabel.CENTER);
-        String[] modes = {"A star", "Dijkstra",  "By Holistic value", "BFS", "Bidirectional Dijkstra"};
         selectMode = new JComboBox<>();
         selectMode.addItem(modes[0]);
         selectMode.addItem(modes[1]);
@@ -261,7 +259,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 String selection = (String) selectMode.getSelectedItem();
                 if (selection.equals("A star")) {
                     if (pathFinderEndNode != null && pathFinderStartNode != null) {
-                        pathFinder = new PathFinder(pathFinderStartNode, pathFinderEndNode, 900 / gridDimention, 900 / gridDimention);
+                        pathFinder = new Astar(pathFinderStartNode, pathFinderEndNode, 900 / gridDimention, 900 / gridDimention);
                         pathFinder.addObserver(GUI.this);
                         for (Node block : blocks) {
                             Node pathfindingBlock = new Node(block.getX() / gridDimention == 90 ? 89 : block.getX() / gridDimention, block.getY() / gridDimention == 90 ? 89 : block.getY() / gridDimention
@@ -323,7 +321,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
                 }
                 else if(selection.equals("BFS")){
                     if (pathFinderEndNode != null && pathFinderStartNode != null) {
-                        bfs = new bfs(pathFinderStartNode, pathFinderEndNode, 900 / gridDimention, 900 / gridDimention);
+                        bfs = new BFS(pathFinderStartNode, pathFinderEndNode, 900 / gridDimention, 900 / gridDimention);
                         bfs.addObserver(GUI.this);
                         for (Node block : blocks) {
                             Node bfsBlock = new Node(block.getX() / gridDimention == 90 ? 89 : block.getX() / gridDimention, block.getY() / gridDimention == 90 ? 89 : block.getY() / gridDimention
@@ -594,7 +592,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
         if (selection.equals("A star")) {
             String operation = (String) arg;
-            PathFinder p = (PathFinder) o;
+            Astar p = (Astar) o;
             if (operation.equals(p.CLOSED)) {
                 PriorityQueue<Node> closedList = p.getClosed();
                 closedNodes = closedList;
@@ -611,7 +609,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 //                } catch (InterruptedException e) {
 //                    e.printStackTrace();
 //                }
-            } else if (operation.equals(PathFinder.OPEN)) {
+            } else if (operation.equals(Astar.OPEN)) {
                 PriorityQueue<Node> openList = p.getOpenList();
                 openNodes = openList;
                 openNodes.remove(pathFinderStartNode);
@@ -635,7 +633,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 
 
             if (operation.equals(d.UNVISITED)) {
-                PriorityQueue<Node> unvisited = d.getUnsettled();
+                PriorityQueue<Node> unvisited = d.getUnvisited();
                 this.unvisited = unvisited;
 
                 this.unvisited.remove(pathFinderStartNode);
@@ -651,7 +649,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
 //                    e.printStackTrace();
 //                }
             } else if (operation.equals(d.VISITED)) {
-                PriorityQueue<Node> visit = d.getSettled();
+                PriorityQueue<Node> visit = d.getVisited();
                 visited = visit;
                 visited.remove(pathFinderStartNode);
                 Graphics x = getGraphics();
@@ -781,7 +779,7 @@ public class GUI extends JPanel implements MouseWheelListener, MouseListener, Ke
         }
         else if(selection.equals("BFS")){
             String operation = (String) arg;
-            bfs d = (bfs) o;
+            BFS d = (BFS) o;
             if(operation.equals("uv")){
                 Queue<Node> unvisited = d.getBFSunvisited();
                 unvisited.remove(pathFinderStartNode);

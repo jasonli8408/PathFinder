@@ -133,4 +133,5 @@ public class MazeGenerator {
     public Grid getGrid() {
         return grid;
     }
+
 }
