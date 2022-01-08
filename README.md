@@ -4,7 +4,7 @@
 2. Dijkstra 
 3. Bi-directional Dijkstra
 4. Holistic value search (greedy)
-5. Breadth first search (BFS)
+5. Breadth first search (BFS) note that BFS can not go diagnal
 
 #To use this application:
 1. hold **s** on keyboard to place a starting point 
