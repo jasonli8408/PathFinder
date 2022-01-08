@@ -3,7 +3,7 @@
 1. A* 
 2. Dijkstra 
 3. Bi-directional Dijkstra
-4. Depth first search (DFS)
+4. Holistic value search (greedy)
 5. Breadth first search (BFS)
 
 #To use this application:
