@@ -3,8 +3,8 @@
 1. A* 
 2. Dijkstra 
 3. Bi-directional Dijkstra
-4. Holistic value search (greedy)
-5. Breadth first search (BFS)
+4. Holistic value search (greedy). Does not give the shortest path 
+5. Breadth first search (BFS) note that BFS can not go diagnal
 
 #To use this application:
 1. hold **s** on keyboard to place a starting point 
@@ -21,11 +21,4 @@ addition note :
     if the user desires to slow down the process of the algorithms at each iteration, simply uncomment timer delay code in the update method in the GUI class
 
     
-
-https://user-images.githubusercontent.com/32078486/147880654-a7a24e56-3346-4cf7-b32d-a8ce66951b40.mov
-
-
-   
-
-https://user-images.githubusercontent.com/32078486/147881396-04103699-0f04-47c7-be33-a21d78ca78ad.mov
 
