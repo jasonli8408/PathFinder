@@ -3,7 +3,7 @@
 1. A* 
 2. Dijkstra 
 3. Bi-directional Dijkstra
-4. Holistic value search (greedy)
+4. Holistic value search (greedy). Does not give the shortest path 
 5. Breadth first search (BFS) note that BFS can not go diagnal
 
 #To use this application:
