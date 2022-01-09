@@ -7,16 +7,17 @@ https://user-images.githubusercontent.com/32078486/148701302-e7d01b2c-603f-4b98-
 
 2. Dijkstra 
 
-https://user-images.githubusercontent.com/32078486/148701322-75cea36c-a4fb-4fa5-83c9-abb10eb7ede9.mov
+https://user-images.githubusercontent.com/32078486/148701315-8393b8ee-64ce-4921-bce3-f077ef4bb349.mov
+
 
 
 3. Bi-directional
 
-https://user-images.githubusercontent.com/32078486/148701315-8393b8ee-64ce-4921-bce3-f077ef4bb349.mov
+https://user-images.githubusercontent.com/32078486/148701329-b471c521-3e4c-4df6-8185-c33348fe5575.mov
 
 4. Holistic value search (greedy). Does not give the shortest path 
 
-https://user-images.githubusercontent.com/32078486/148701329-b471c521-3e4c-4df6-8185-c33348fe5575.mov
+https://user-images.githubusercontent.com/32078486/148701322-75cea36c-a4fb-4fa5-83c9-abb10eb7ede9.mov
 
 5. Breadth first search (BFS) note that BFS can not go diagnal
 
