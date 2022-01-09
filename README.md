@@ -10,10 +10,13 @@ https://user-images.githubusercontent.com/32078486/148701302-e7d01b2c-603f-4b98-
 https://user-images.githubusercontent.com/32078486/148701315-8393b8ee-64ce-4921-bce3-f077ef4bb349.mov
 
 
-
 3. Bi-directional
 
-https://user-images.githubusercontent.com/32078486/148701329-b471c521-3e4c-4df6-8185-c33348fe5575.mov
+
+
+https://user-images.githubusercontent.com/32078486/148701401-a94b617f-05ae-416b-9530-9b9ca32bc98f.mov
+
+
 
 4. Holistic value search (greedy). Does not give the shortest path 
 
