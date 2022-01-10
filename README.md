@@ -1,8 +1,11 @@
 # Path Finder
 ## This is a project that educates users on path finding algorithms. In our User Interface:
-### -blue nodes represent start node
-### -red nodes represent end node
-### -black nodes represent obstacles where the search algorithm cannot pass through. 
+### - Blue nodes represent start node
+### - Red nodes represent end node
+### - Black nodes represent obstacles where the search algorithm cannot pass through. 
+### - Magenta nodes represent locations where the algorithm looked through
+### - Green nodes represent locations where the algorithm can step on for the next iteration
+### - Pink nodes represent the path from start to end node, if such a path exists.
 ## We've included the following algorithms: 
 1. A* 
 
