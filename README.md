@@ -1,5 +1,5 @@
-# path finder
-#this is a project that educates users on path finding algorithms. In our program, blue nodes represent start node, red nodes represent end node, and black nodes represent obstacles where ther search algorithm cannot pass throughgh. We've included the following algorithms: 
+# Path Finder
+## This is a project that educates users on path finding algorithms. In our program, blue nodes represent start node, red nodes represent end node, and black nodes represent obstacles where ther search algorithm cannot pass throughgh. We've included the following algorithms: 
 1. A* 
 
 https://user-images.githubusercontent.com/32078486/148701302-e7d01b2c-603f-4b98-9c61-d3a1e559d019.mov
@@ -28,7 +28,7 @@ https://user-images.githubusercontent.com/32078486/148701322-75cea36c-a4fb-4fa5-
 https://user-images.githubusercontent.com/32078486/148701343-4b1ad568-8104-4b85-a359-ca98a955de61.mov
 
 
-#To use this application:
+## To use this application:
 1. hold **s** on keyboard to place a starting point 
 2. hold **e** on keyboard to place the ending point 
 3. hold **b**, and drag the mouse across the grid to create your own obstables to challenge the path finding algorithms. Or simply select "make maze" button to randmoly generate a maze. 
