@@ -1,5 +1,5 @@
 # path finder
-#this is a project that educates users on path finding algorithms, we included the following algorithms: 
+#this is a project that educates users on path finding algorithms. In our program, blue nodes represent start node, red nodes represent end node, and black nodes represent obstacles where ther search algorithm cannot pass throughgh. We've included the following algorithms: 
 1. A* 
 
 https://user-images.githubusercontent.com/32078486/148701302-e7d01b2c-603f-4b98-9c61-d3a1e559d019.mov
